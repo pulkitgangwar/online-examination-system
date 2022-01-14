@@ -1,9 +1,7 @@
 import { Router } from "express";
 const router = Router();
 
-router.get("/", (req, res) => {
-  console.log(req.session);
-  console.log(req.user);
+router.get("/", async (req, res) => {
   res.render("home/index");
 });
 

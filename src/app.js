@@ -4,19 +4,16 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import passport from "passport";
 import session from "express-session";
-import CreateSequelizeStore from "connect-session-sequelize";
 import cookieParser from "cookie-parser";
 import { connectDB } from "./helpers/connectDB.js";
 import { initializeGoogleStrategy } from "./strategy/google.js";
-import { sequelize } from "./config/database.js";
 import { __dirname } from "../dirname.js";
+import sessionStore from "./config/sessionStore.js";
 
 // routes
 import AuthRoutes from "./routes/auth.js";
 import HomeRoutes from "./routes/home.js";
 import { authenticate } from "./middlewares/authenticate.js";
-
-const SequelizeStore = CreateSequelizeStore(session.Store);
 
 const app = express();
 
@@ -43,9 +40,11 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: new SequelizeStore({
-      db: sequelize,
-    }),
+    store: sessionStore,
+    cookie: {
+      httpOnly: true,
+      maxAge: 8640000, // 1 day
+    },
   })
 );
 
