@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import { sequelize } from "../config/database.js";
+import { sequelize } from "../config/database";
 
 export class User extends Model {}
 
@@ -21,7 +21,7 @@ User.init(
       unique: true,
     },
     role: {
-      type: DataTypes.ENUM(["STUDENT", "TEACHER"]),
+      type: DataTypes.STRING(255),
       defaultValue: "STUDENT",
     },
     picture: {

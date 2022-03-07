@@ -20,12 +20,13 @@ router.get(
 );
 
 router.get("/logout", (req, res) => {
-  req.session.destroy();
-  res.clearCookie("connect.sid", {
-    httpOnly: true,
-    maxAge: 8640000, // 1 day
+  req.session.destroy((err) => {
+    res.clearCookie("connect.sid", {
+      httpOnly: true,
+      maxAge: 8640000, // 1 day
+    });
+    res.redirect("/auth/signin");
   });
-  res.redirect("/auth/signin");
 });
 
 export default router;

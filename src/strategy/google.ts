@@ -1,6 +1,12 @@
-import GoogleStrategy from "passport-google-oauth2";
+import GoogleStrategy, { VerifyCallback } from "passport-google-oauth2";
 import passport from "passport";
-import { User } from "../models/User.js";
+import { User } from "../models/User";
+import { Request } from "express";
+interface SessionUser {
+  id: string;
+  email: string;
+  role: string;
+}
 
 export const initializeGoogleStrategy = () => {
   passport.use(
@@ -11,7 +17,13 @@ export const initializeGoogleStrategy = () => {
         callbackURL: process.env.GOOGLE_CALLBACK_URL,
         passReqToCallback: true,
       },
-      async function (request, accessToken, refreshToken, profile, done) {
+      async function (
+        request: Request,
+        accessToken: string,
+        refreshToken: string,
+        profile: any,
+        done: VerifyCallback
+      ) {
         try {
           const user = await User.findOne({ where: { email: profile.email } });
           if (user) {
@@ -45,7 +57,7 @@ export const initializeGoogleStrategy = () => {
     )
   );
 
-  passport.serializeUser((user, done) => {
+  passport.serializeUser((user: SessionUser, done) => {
     console.log("used the serlize user function");
     done(null, user.id);
   });
