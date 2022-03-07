@@ -13,11 +13,6 @@ export const initializeGoogleStrategy = () => {
       },
       async function (request, accessToken, refreshToken, profile, done) {
         try {
-          console.log(profile);
-          console.log(typeof profile.id);
-          console.log(typeof profile.email);
-          console.log(typeof profile.displayName);
-          console.log(typeof profile.picture)
           const user = await User.findOne({ where: { email: profile.email } });
           if (user) {
             return done(null, {
@@ -28,10 +23,11 @@ export const initializeGoogleStrategy = () => {
           }
 
           const savedUser = await User.create({
-            id: parseInt(profile.id),
+            id: profile.id,
             email: profile.email,
             name: profile.displayName,
             picture: profile.picture,
+            role: "STUDENT",
           });
 
           done(null, {
@@ -44,7 +40,7 @@ export const initializeGoogleStrategy = () => {
           console.log(err.message);
           console.log("problem in storing user");
           done(err, null);
-        }  
+        }
       }
     )
   );
