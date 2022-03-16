@@ -1,77 +1,38 @@
-import GoogleStrategy, { VerifyCallback } from "passport-google-oauth2";
-import passport from "passport";
-import { User } from "../models/User";
-import { Request } from "express";
-interface SessionUser {
-  id: string;
-  email: string;
-  role: string;
-}
+import { google } from "googleapis";
+import dotenv from "dotenv";
+import { User } from "../interface/interface";
+dotenv.config();
 
-export const initializeGoogleStrategy = () => {
-  passport.use(
-    new GoogleStrategy.Strategy(
-      {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_URL,
-        passReqToCallback: true,
-      },
-      async function (
-        request: Request,
-        accessToken: string,
-        refreshToken: string,
-        profile: any,
-        done: VerifyCallback
-      ) {
-        try {
-          const user = await User.findOne({ where: { email: profile.email } });
-          if (user) {
-            return done(null, {
-              id: user.getDataValue("id"),
-              email: user.getDataValue("email"),
-              role: user.getDataValue("role"),
-            });
-          }
+export const oauth2Client = new google.auth.OAuth2({
+  clientId: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  redirectUri: process.env.GOOGLE_CALLBACK_URL,
+});
 
-          const savedUser = await User.create({
-            id: profile.id,
-            email: profile.email,
-            name: profile.displayName,
-            picture: profile.picture,
-            role: "STUDENT",
-          });
+export const googleAuthUrl = oauth2Client.generateAuthUrl({
+  scope: ["profile", "email"],
+  access_type: "offline",
+});
 
-          done(null, {
-            id: savedUser.getDataValue("id"),
-            email: savedUser.getDataValue("email"),
-            role: savedUser.getDataValue("role"),
-          });
-        } catch (err) {
-          console.log(err);
-          console.log(err.message);
-          console.log("problem in storing user");
-          done(err, null);
-        }
-      }
-    )
-  );
+google.options({ auth: oauth2Client });
 
-  passport.serializeUser((user: SessionUser, done) => {
-    console.log("used the serlize user function");
-    done(null, user.id);
-  });
+export const getUsersGoogleData = async (code: string): Promise<User> => {
+  try {
+    const { tokens } = await oauth2Client.getToken(code);
+    oauth2Client.setCredentials(tokens);
 
-  passport.deserializeUser(async (id, done) => {
-    try {
-      const user = await User.findOne({ where: { id } });
-      done(null, {
-        id: user.getDataValue("id"),
-        email: user.getDataValue("email"),
-        role: user.getDataValue("role"),
-      });
-    } catch (err) {
-      done(err, null);
-    }
-  });
+    const data = google.oauth2({
+      version: "v2",
+    });
+    const userData = await data.userinfo.get();
+
+    return {
+      email: userData.data.email,
+      name: userData.data.name,
+      id: userData.data.id,
+      picture: userData.data.picture,
+    };
+  } catch (err) {
+    console.log(err);
+  }
 };
