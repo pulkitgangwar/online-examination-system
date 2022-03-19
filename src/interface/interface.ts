@@ -16,6 +16,17 @@ export interface Session {
   id: string;
 }
 
+export enum Role {
+  STUDENT = "STUDENT",
+  TEACHER = "TEACHER",
+}
+
 export interface RequestWithUser extends Request {
-  user: User;
+  user: {
+    role: Role;
+    email: string;
+    name: string;
+    id: string;
+    picture: string;
+  };
 }
