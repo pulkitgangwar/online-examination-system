@@ -1,0 +1,26 @@
+<form class="add-quiz">
+  <input
+    name="title"
+    type="text"
+    class="add-quiz__title"
+    placeholder="Enter a title"
+    required
+  />
+  <input
+    name="description"
+    class="add-quiz__description"
+    type="text"
+    placeholder="Enter description"
+    required
+  />
+  <input type="datetime-local" name="date" class="add-quiz__date" required />
+
+  <div class="add-quiz__questions quiz-questions">
+
+  </div>
+  <button class="question__add-button" type="button">add question</button>
+  <button type="submit">create quiz</button>
+
+</form>
+
+<script src="/scripts/quiz/addquiz.js"></script>

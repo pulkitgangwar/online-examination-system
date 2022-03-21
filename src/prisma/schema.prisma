@@ -18,6 +18,7 @@ model User {
   year    Int?
   picture String?
   session Session[]
+  reports Report[]
 }
 
 model Session {
@@ -29,4 +30,45 @@ model Session {
 enum Role {
   STUDENT
   TEACHER
+}
+
+model Quiz {
+  id          String     @id
+  title       String
+  description String
+  Questions   Question[]
+  reports     Report[]
+  date        DateTime?
+}
+
+model Question {
+  id        String   @id
+  question  String
+  quizes    Quiz[]
+  options   Option[]
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  subjectId String
+}
+
+model Subject {
+  id        String     @id
+  subject   String
+  questions Question[]
+}
+
+model Option {
+  id        String     @id
+  option    String
+  questions Question[]
+}
+
+model Report {
+  id     String @id
+  score  String
+  quiz   Quiz   @relation(fields: [quizId], references: [id])
+  quizId String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  data   Json
+
 }

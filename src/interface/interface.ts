@@ -30,3 +30,24 @@ export interface RequestWithUser extends Request {
     picture: string;
   };
 }
+
+export interface Quiz {
+  id: string;
+  title: string;
+  description: string;
+}
+
+
+export interface QuizQuestions {
+  question: string;
+  correctAnswer: string;
+  subject: string;
+  options: { [key: string]: string };
+}
+
+export interface QuizData {
+  title: string;
+  description: string;
+  questions: QuizQuestions[];
+  date: Date;
+}
