@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
-import { User, Session } from "../interface/interface";
 import { prisma } from "../config/client";
+import { User, Session } from "@prisma/client";
 
 export const getUser = async (id: string): Promise<User> => {
   try {
@@ -48,7 +48,9 @@ export const createUser = async (user: User): Promise<User> => {
 
     const newUser = await prisma.user.create({
       data: {
-        ...user,
+        email: user.email,
+        name: user.name,
+        picture: user.picture,
       },
     });
 
@@ -63,8 +65,8 @@ export const createUserSession = async (user: User): Promise<Session> => {
   try {
     const newSession = await prisma.session.create({
       data: {
-        id: nanoid(),
         userId: user.id,
+        expiresAt: new Date(Date.now() + 86400 * 1000 * 7),
       },
     });
 

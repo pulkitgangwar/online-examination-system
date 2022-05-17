@@ -1,6 +1,6 @@
 import { google } from "googleapis";
 import dotenv from "dotenv";
-import { User } from "../interface/interface";
+import { GoogleUser } from "../interface/interface";
 dotenv.config();
 
 export const oauth2Client = new google.auth.OAuth2({
@@ -16,7 +16,7 @@ export const googleAuthUrl = oauth2Client.generateAuthUrl({
 
 google.options({ auth: oauth2Client });
 
-export const getUsersGoogleData = async (code: string): Promise<User> => {
+export const getUsersGoogleData = async (code: string): Promise<GoogleUser> => {
   try {
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);

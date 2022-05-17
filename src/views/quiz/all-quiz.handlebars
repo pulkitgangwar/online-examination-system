@@ -1,0 +1,48 @@
+<div class="quizzes">
+
+  <div class="mb-6">
+    <h1 class="title is-1">Exams</h1>
+    <a href="/quiz/add" class="button is-primary is-medium">
+      <i class="fa-solid fa-plus mr-2"></i>
+      Add Quiz
+    </a>
+  </div>
+
+  {{#if information.error}}
+    <div class="notification is-danger mt-1">
+      {{information.error}}
+    </div>
+  {{/if}}
+
+  {{#if information.success}}
+    <div class="notification is-primary mt-1">
+      {{information.success}}
+    </div>
+  {{/if}}
+
+  {{#if quizzes.length}}
+    {{#each quizzes}}
+      <div class="card quiz mb-5" id="{{this.id}}">
+        <header class="card-header">
+          <p class="card-header-title title is-3">
+            {{this.title}}
+          </p>
+        </header>
+        <div class="card-content">
+          <div class="content">
+            <p>{{this.description}}</p>
+            <p>Exam Starts On - {{this.startingDateInFormat}}</p>
+            <p>Exam Ends On - {{this.endingDateInFormat}}</p>
+            <p>Time Limit - {{this.timeLimitInFormat}}</p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="/quiz/view/{{this.id}}" class="card-footer-item">View</a>
+          <a href="/quiz/edit/{{this.id}}" class="card-footer-item">Edit</a>
+        </footer>
+      </div>
+    {{/each}}
+  {{else}}
+    <h1>No Quiz Found</h1>
+  {{/if}}
+</div>

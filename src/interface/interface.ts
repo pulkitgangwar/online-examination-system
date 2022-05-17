@@ -1,24 +1,8 @@
 import { Request } from "express";
+import { Role } from "@prisma/client";
 
 export interface Query {
   [key: string]: string;
-}
-
-export interface User {
-  email: string;
-  name: string;
-  id: string;
-  picture: string;
-}
-
-export interface Session {
-  userId: string;
-  id: string;
-}
-
-export enum Role {
-  STUDENT = "STUDENT",
-  TEACHER = "TEACHER",
 }
 
 export interface RequestWithUser extends Request {
@@ -31,12 +15,18 @@ export interface RequestWithUser extends Request {
   };
 }
 
+export interface GoogleUser {
+  id: string;
+  name: string;
+  email: string;
+  picture: string;
+}
+
 export interface Quiz {
   id: string;
   title: string;
   description: string;
 }
-
 
 export interface QuizQuestions {
   question: string;

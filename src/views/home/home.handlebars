@@ -1,0 +1,42 @@
+{{> navbar}}
+
+{{! sidebar }}
+
+ {{#if isTeacher}}
+    {{> teacher-sidebar}}
+  {{else}}
+    {{> student-sidebar}}
+ {{/if}}
+ 
+{{! sidebar ends }}
+
+<h1>Home</h1>
+<img src={{picture}} alt="user image" />
+
+<div>
+  {{#each quizzes}}
+    <div class="card quiz mb-5" id="{{this.id}}">
+      <header class="card-header">
+        <p class="card-header-title title is-3">
+          {{this.title}}
+        </p>
+      </header>
+      <div class="card-content">
+        <div class="content">
+          <p>{{this.description}}</p>
+          <p>Exam Starts On - {{this.startingDateInFormat}}</p>
+          <p>Exam Ends On - {{this.endingDateInFormat}}</p>
+          <p>Time Limit - {{this.timeLimitInFormat}}</p>
+        </div>
+      </div>
+      <footer class="card-footer">
+        <a href="/quiz/start/{{this.id}}" class="card-footer-item">Start</a>
+      </footer>
+    </div>
+
+  {{/each}}
+</div>
+
+<br />
+
+<a href="/auth/logout">logout</a>

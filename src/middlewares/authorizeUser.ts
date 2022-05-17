@@ -1,5 +1,6 @@
 import { NextFunction, Response } from "express";
-import { RequestWithUser, Role } from "../interface/interface";
+import { Role } from "@prisma/client";
+import { RequestWithUser } from "../interface/interface";
 
 export const authorizeUser = async (
   req: RequestWithUser,

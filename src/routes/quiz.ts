@@ -3,8 +3,12 @@ import { Quiz } from "../controllers/Quiz";
 
 const router = Router();
 
-router.get("/", Quiz.home);
-router.get("/add", Quiz.showAddQuiz);
-router.post("/add/callback", Quiz.addQuiz);
+router.get("/", Quiz.allQuiz);
+router.get("/add", Quiz.addQuiz);
+router.post("/add/callback", Quiz.addQuizCallback);
+router.get("/edit/:quizId", Quiz.editQuiz);
+router.post("/edit/callback", Quiz.editQuizCallback);
+router.delete("/delete/:quizId", Quiz.deleteQuiz);
+router.get("/start/:quizId", Quiz.startQuiz);
 
 export default router;
