@@ -31,6 +31,7 @@ export class DbUser {
 
       res.render("users/edit-user", {
         user,
+        isEditingUserTeacher: user.role === "TEACHER",
       });
       return null;
     } catch (err) {

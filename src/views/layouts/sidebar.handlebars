@@ -12,76 +12,64 @@
       rel="stylesheet"
       href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css"
     />
+
+    <link rel="stylesheet" href="/styles/sidebar.css" />
   </head>
   <body>
 
     <div
+      class="main"
       style="font-family:'nunito sans';position:relative;height:100vh;display:flex;"
     >
-      <div
-        class="has-background-black-bis"
-        style="position:sticky;left:0;top:0;height:100%;width:350px;overflow-y:scroll;color:white;"
-      >
-        <div style="padding:20px">
-          <div style="margin-bottom:32px; cursor:pointer;color:white;">
-            <h1 class="title is-4" style="color:white;">Online Examination
-              System</h1>
+      <div class="main__container sidebar">
+        <div class="sidebar__container">
+          <div class="sidebar__logo">
+            <h1>Exam</h1>
           </div>
 
-          {{#if isTeacher}}
-            <div>
-              <a
-                href="/users"
-                class="has-background-grey-darker is-block"
-                style="color:white;text-decoration:none;font-family:'nunito sans';font-size:20px;padding:16px 48px;border-radius:4px;cursor:pointer;margin-bottom:8px;"
-              >
-                <span style="">Users</span>
+          <div class="sidebar__menu">
+            {{#if isTeacher}}
+              <a href="/users" class="sidebar__menu__item">
+                <div><i class="fa-solid fa-user-gear"></i></div>
+                <div><p>Users</p></div>
               </a>
-              <a
-                href="/quiz"
-                class="has-background-grey-darker is-block"
-                style="color:white;text-decoration:none;font-family:'nunito sans';font-size:20px;background-color:red;padding:16px 48px;border-radius:4px;cursor:pointer;margin-bottom:8px;"
-              >
-                <span style="">Exams</span>
+              <a href="/quiz" class="sidebar__menu__item">
+                <div><i class="fa-solid fa-book-open-reader"></i></div>
+                <div><p>Exams</p></div>
               </a>
-              <a
-                href="/home/profile"
-                class="has-background-grey-darker is-block"
-                style="color:white;text-decoration:none;font-family:'nunito sans';font-size:20px;background-color:red;padding:16px 48px;border-radius:4px;cursor:pointer;margin-bottom:8px;"
-              >
-                <span style="">Profile</span>
+              <a href="/announcement" class="sidebar__menu__item">
+                <div><i class="fa-solid fa-circle-exclamation"></i></div>
+                <div><p>Announcements</p></div>
               </a>
-            </div>
-          {{else}}
-            <div>
-              <a
-                href="/home"
-                class="has-background-grey-darker is-block"
-                style="color:white;text-decoration:none;font-family:'nunito sans';font-size:20px;padding:16px 48px;border-radius:4px;cursor:pointer;margin-bottom:8px;"
-              >
-                <span style="">Home</span>
+              <a href="/home/profile" class="sidebar__menu__item">
+                <div><i class="fa-solid fa-user"></i></div>
+                <div><p>Profile</p></div>
               </a>
-              <a
-                href="/home/reports"
-                class="has-background-grey-darker is-block"
-                style="color:white;text-decoration:none;font-family:'nunito sans';font-size:20px;background-color:red;padding:16px 48px;border-radius:4px;cursor:pointer;margin-bottom:8px;"
-              >
-                <span style="">Report</span>
-              </a>
-              <a
-                href="/home/profile"
-                class="has-background-grey-darker is-block"
-                style="color:white;text-decoration:none;font-family:'nunito sans';font-size:20px;background-color:red;padding:16px 48px;border-radius:4px;cursor:pointer;margin-bottom:8px;"
-              >
-                <span style="">Profile</span>
-              </a>
-            </div>
 
-          {{/if}}
+            {{else}}
+              <a href="/home" class="sidebar__menu__item">
+                <div><i class="fa-solid fa-house"></i></div>
+                <div><p>Home</p></div>
+              </a>
+              <a href="/home/reports" class="sidebar__menu__item">
+                <div><i class="fa-solid fa-file"></i></div>
+                <div><p>Reports</p></div>
+              </a>
+
+              <a href="/home/profile" class="sidebar__menu__item">
+                <div><i class="fa-solid fa-user"></i></div>
+                <div><p>Profile</p></div>
+              </a>
+
+            {{/if}}
+          </div>
 
         </div>
       </div>
-      <div style="flex:1;overflow-y:scroll;padding:24px;">
+      <div
+        style="flex:1;overflow-y:scroll;padding:24px;"
+        class="main__container"
+      >
         <div>
           {{#if isBackButtonAvailable}}
              {{> back}} 

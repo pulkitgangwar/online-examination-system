@@ -12,6 +12,7 @@ import RootRoutes from "./routes/root";
 import DashboardRoutes from "./routes/dashboard";
 import UserRoutes from "./routes/user";
 import QuizRoutes from "./routes/quiz";
+import AnnouncementRoutes from "./routes/announcement";
 import { authorizeUser } from "./middlewares/authorizeUser";
 
 const app = express();
@@ -52,6 +53,7 @@ app.use("/home", authenticate, RootRoutes);
 app.use("/dashboard", authenticate, authorizeUser, DashboardRoutes);
 app.use("/users", authenticate, authorizeUser, UserRoutes);
 app.use("/quiz", authenticate, authorizeUser, QuizRoutes);
+app.use("/announcement", authenticate, authorizeUser, AnnouncementRoutes);
 app.use((req, res) => {
   res.status(404).render("404", { layout: "main" });
 });

@@ -11,17 +11,18 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  name      String
-  email     String
-  role      Role      @default(STUDENT)
-  year      Int
-  semester  Int?
-  picture   String?
-  session   Session[]
-  reports   Report[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
+  id            String         @id @default(uuid())
+  name          String
+  email         String
+  role          Role           @default(STUDENT)
+  year          Int
+  semester      Int?
+  picture       String?
+  session       Session[]
+  reports       Report[]
+  announcements Announcement[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt
 }
 
 model Session {
@@ -70,6 +71,15 @@ model Report {
   data      Json
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Announcement {
+  id          String   @id @default(uuid())
+  description String
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
 }
 
 enum Role {

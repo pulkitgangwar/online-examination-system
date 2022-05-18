@@ -83,7 +83,7 @@
     <label class="label" for="add-user__role-input">Role</label>
     <div class="select" style="width:100%">
       <select required name="role" style="width:100%">
-        {{#if isTeacher}}
+        {{#if isEditingUserTeacher}}
           <option value="STUDENT">Student</option>
           <option value="TEACHER" selected>Teacher</option>
         {{else}}
