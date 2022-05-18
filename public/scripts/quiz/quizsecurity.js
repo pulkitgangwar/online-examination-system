@@ -1,12 +1,19 @@
-// DisableDevtool({});
+DisableDevtool({});
 
-// window.onbeforeunload = () => "";
-// window.close = () => "";
+window.onbeforeunload = () => "";
+window.close = () => "";
 window.warnings = 0;
 
 const videoElement = document.querySelector(".quiz__camera__input-video");
 const canvasElement = document.querySelector(".quiz__camera__output-video");
 const canvasCtx = canvasElement.getContext("2d");
+let escapeWarnings = 0;
+let facialDetectionWarnings = 0;
+
+setInterval(() => {
+  console.log(escapeWarnings);
+  console.log(facialDetectionWarnings);
+}, 1000);
 
 function onResults(results) {
   canvasCtx.save();
@@ -19,7 +26,14 @@ function onResults(results) {
     canvasElement.height
   );
   if (results.multiFaceLandmarks) {
-    if (results.multiFaceLandmarks.length !== 1) warnings++;
+    if (results.multiFaceLandmarks.length !== 1) {
+      facialDetectionWarnings++;
+      swal({
+        title: "Facial Detection Warning",
+        text: "There should always be a single person on camera",
+        button: "Continue",
+      });
+    }
 
     for (const landmarks of results.multiFaceLandmarks) {
       drawConnectors(canvasCtx, landmarks, FACEMESH_TESSELATION, {

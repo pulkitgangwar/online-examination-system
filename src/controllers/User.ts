@@ -31,7 +31,6 @@ export class DbUser {
 
       res.render("users/edit-user", {
         user,
-        isTeacher: user.role === "TEACHER",
       });
       return null;
     } catch (err) {
@@ -69,7 +68,9 @@ export class DbUser {
       });
 
       if (!newUser)
-        return res.render("users/edit-user", { error: "something went wrong" });
+        return res.render("users/edit-user", {
+          error: "something went wrong",
+        });
 
       res.redirect("/users");
     } catch (err) {
@@ -91,13 +92,17 @@ export class DbUser {
       !req.body?.semester ||
       !req.body?.role
     ) {
-      return res.render("users/add-user", { error: "invalid data provided" });
+      return res.render("users/add-user", {
+        error: "invalid data provided",
+      });
     }
 
     try {
       const user = await AuthUser.findUser(req.body.email);
       if (user) {
-        return res.render("users/add-user", { error: "user already exists" });
+        return res.render("users/add-user", {
+          error: "user already exists",
+        });
       }
 
       const currentUser = {
@@ -129,7 +134,9 @@ export class DbUser {
       res.redirect("/users");
     } catch (err) {
       console.log("err in user controller", err);
-      res.render("users/add-user", { error: "something went wrong" });
+      res.render("users/add-user", {
+        error: "something went wrong",
+      });
     }
   }
 

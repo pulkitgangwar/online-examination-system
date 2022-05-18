@@ -8,7 +8,7 @@ export const authorizeUser = async (
   next: NextFunction
 ): Promise<void> => {
   if (req.user.role !== Role.TEACHER) {
-    res.redirect("/");
+    res.redirect("/home");
     return;
   }
 

@@ -1,42 +1,36 @@
-{{> navbar}}
+<h1 class="title is-2">Exams</h1>
 
-{{! sidebar }}
-
- {{#if isTeacher}}
-    {{> teacher-sidebar}}
-  {{else}}
-    {{> student-sidebar}}
- {{/if}}
- 
-{{! sidebar ends }}
-
-<h1>Home</h1>
-<img src={{picture}} alt="user image" />
-
-<div>
-  {{#each quizzes}}
-    <div class="card quiz mb-5" id="{{this.id}}">
-      <header class="card-header">
-        <p class="card-header-title title is-3">
-          {{this.title}}
-        </p>
-      </header>
-      <div class="card-content">
-        <div class="content">
-          <p>{{this.description}}</p>
-          <p>Exam Starts On - {{this.startingDateInFormat}}</p>
-          <p>Exam Ends On - {{this.endingDateInFormat}}</p>
-          <p>Time Limit - {{this.timeLimitInFormat}}</p>
-        </div>
+{{#each quizzes}}
+  <div class="card quiz mb-5" id="{{this.id}}">
+    <header class="card-header">
+      <p class="card-header-title title is-3">
+        {{this.title}}
+      </p>
+    </header>
+    <div class="card-content">
+      <div class="content">
+        <p>Exam Starts On - {{this.startingDateInFormat}}</p>
+        <p>Exam Ends On - {{this.endingDateInFormat}}</p>
+        <p>Time Limit - {{this.timeLimitInFormat}}</p>
+        <span class="tag is-primary is-bold is-size-6">{{this.subject}}</span>
+        {{#if this.isActive}}
+          <span class="tag is-success is-bold is-size-6">Exam is active</span>
+        {{else}}
+          <span class="tag is-danger is-bold is-size-6">Exam is not active</span>
+        {{/if}}
+        {{#if this.examCompleted}}
+          <span class="tag is-success is-bold is-size-6">Completed</span>
+        {{/if}}
       </div>
-      <footer class="card-footer">
-        <a href="/quiz/start/{{this.id}}" class="card-footer-item">Start</a>
-      </footer>
     </div>
+    <footer class="card-footer">
+      {{#if this.examCompleted}}{{else}}
+        <a
+          href="/home/quiz/start/{{this.id}}"
+          class="card-footer-item"
+        >Start</a>
+      {{/if}}
+    </footer>
+  </div>
 
-  {{/each}}
-</div>
-
-<br />
-
-<a href="/auth/logout">logout</a>
+{{/each}}

@@ -26,6 +26,8 @@ const userAnswersWithQuestion = questions.map((question) => ({
   userAnswer: -1,
 }));
 
+_examData.totalTimeTakenByUser = _examData.timeLimit * 60;
+
 const createQuestionHtml = (question) => {
   return `
          
@@ -84,6 +86,8 @@ const goToQuestion = (e) => {
 const handleUserAnswer = (e) => {
   const currentQuestion = userAnswersWithQuestion[currentQuestionIndex];
 
+  console.log(currentQuestion.correctAnswer);
+
   if (
     currentQuestion.userAnswer !== -1 &&
     currentQuestion.userAnswer === parseInt(e.id)
@@ -117,6 +121,7 @@ const handleTime = () => {
   let timeRemaining = _examData.timeLimit * 60;
   const interval = setInterval(() => {
     timeRemaining -= 1;
+    _examData.totalTimeTakenByUser--;
     const timeHtml = `
     <h4>${parseTime(timeRemaining)}</h4> 
     <progress class="progress is-primary" style="width:100%;background-color:gray;" value="${timeRemaining}" max="${
@@ -127,6 +132,7 @@ const handleTime = () => {
 
     if (timeRemaining <= 0) {
       clearInterval(interval);
+      submitQuiz(_examData, userAnswersWithQuestion);
     }
   }, 1000);
   timeContainer.innerHTML = parseTime(timeRemaining);
@@ -149,7 +155,6 @@ nextBtn.addEventListener("click", (e) => {
   }
 
   currentQuestionIndex++;
-  console.log(currentQuestionIndex);
   injectQuestion(userAnswersWithQuestion[currentQuestionIndex]);
   return;
 });
@@ -196,28 +201,33 @@ submitBtn.addEventListener("click", async (e) => {
       return;
     }
 
-    const data = {
-      examId: _examData.id,
-      userAnswers: userAnswersWithQuestion.map((question) => ({
-        id: question.id,
-        userAnswer: question.userAnswer,
-      })),
-    };
-
-    fetch(`http://localhost:3000/home/quiz/report`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (response) {
-          window.location.href = response.url;
-        }
-      })
-      .catch((err) => {
-        console.log(err, "frontend");
-      });
+    submitQuiz(_examData, userAnswersWithQuestion);
   });
 });
+
+function submitQuiz(_examData, userAnswersWithQuestion) {
+  const data = {
+    examId: _examData.id,
+    totalTimeTakenByUser: _examData.totalTimeTakenByUser,
+    userAnswers: userAnswersWithQuestion.map((question) => ({
+      id: question.id,
+      userAnswer: question.userAnswer,
+    })),
+  };
+
+  fetch(`http://localhost:3000/home/quiz/report`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (response) {
+        window.location.href = response.url;
+      }
+    })
+    .catch((err) => {
+      console.log(err, "frontend");
+    });
+}

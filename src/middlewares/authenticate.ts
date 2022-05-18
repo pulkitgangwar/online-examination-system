@@ -1,4 +1,5 @@
 import { AuthSession } from "../services/Session";
+import { Request } from "express";
 
 export const authenticate = async (
   req: any,
@@ -29,6 +30,9 @@ export const authenticate = async (
       res.redirect("/auth/google");
       return;
     }
+    res.locals.isTeacher = session.user.role === "TEACHER";
+    res.locals.isBackButtonAvailable =
+      req.originalUrl.split("/").filter((url: string) => url).length >= 2;
 
     req.user = session.user;
 

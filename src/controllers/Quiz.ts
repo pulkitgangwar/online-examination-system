@@ -32,7 +32,9 @@ export class Quiz {
   }
 
   static async addQuiz(req: RequestWithUser, res: Response): Promise<void> {
-    res.render("quiz/add-quiz", { route: "showaddquiz route" });
+    res.render("quiz/add-quiz", {
+      route: "showaddquiz route",
+    });
   }
 
   static async addQuizCallback(
@@ -159,30 +161,5 @@ export class Quiz {
     await prisma.quiz.delete({ where: { id: req.params.quizId } });
 
     res.redirect("/quiz?_success='quiz deleted successfully'");
-  }
-
-  static async startQuiz(req: RequestWithUser, res: Response) {
-    try {
-      if (!req.params?.quizId) {
-        return res.redirect("/home?_error=id was not provided");
-      }
-
-      const quiz = await prisma.quiz.findFirst({
-        where: { id: req.params.quizId },
-        include: { Questions: true },
-      });
-
-      if (!quiz) return res.redirect("/home?_error=quiz not available");
-      console.log(quiz);
-
-      res.render("quiz/take-quiz", {
-        quiz,
-      });
-    } catch (err) {
-      console.log("err in quiz controller", err);
-      return res.redirect(
-        "/home?_error=something went wrong please try again later"
-      );
-    }
   }
 }

@@ -15,7 +15,7 @@ export class Auth {
       information.error = req.query["_error"];
     }
 
-    res.render("auth/signin", { googleAuthUrl, information });
+    res.render("auth/signin", { googleAuthUrl, information, layout: "main" });
   }
 
   static async signInCallback(

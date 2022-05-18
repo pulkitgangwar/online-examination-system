@@ -31,6 +31,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.engine(
   "handlebars",
   engine({
+    defaultLayout: "sidebar",
     helpers: {
       json: (ctx: any) => JSON.stringify(ctx),
     },
@@ -39,36 +40,21 @@ app.engine(
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
 
-app.get("/", (req, res) => {
-  res.render("home");
-});
-// app.set("view engine", "hbs");
-// app.set("views", path.join(__dirname, "/views"));
-// app.set("view options", {
-//   layout: "layouts/main",
-// });
-// hbs.registerHelper("json", (ctx) => JSON.stringify(ctx));
-// const partialsDir = path.join(__dirname, "/views/partials");
-// const filenames = readdirSync(partialsDir);
-// filenames.forEach(function (filename) {
-//   const matches = /^([^.]+).hbs$/.exec(filename);
-//   if (!matches) {
-//     return;
-//   }
-//   const name = matches[1];
-//   const template = readFileSync(partialsDir + "/" + filename, "utf8");
-//   hbs.registerPartial(name, template);
-// });
-
 // morgan config
 app.use(morgan("dev"));
 
 // routes
+app.get("/", (req, res) => {
+  res.redirect("/home");
+});
 app.use("/auth", AuthRoutes);
 app.use("/home", authenticate, RootRoutes);
 app.use("/dashboard", authenticate, authorizeUser, DashboardRoutes);
 app.use("/users", authenticate, authorizeUser, UserRoutes);
 app.use("/quiz", authenticate, authorizeUser, QuizRoutes);
+app.use((req, res) => {
+  res.status(404).render("404", { layout: "main" });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {

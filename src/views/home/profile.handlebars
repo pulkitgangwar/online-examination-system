@@ -1,5 +1,3 @@
-{{> navbar}}
-
 <section class="container" style="height:100vh;">
   <div
     class="columns is-multiline"
@@ -13,10 +11,26 @@
               style="width:100px;height:100px;border-radius:100%;"
               class="has-background-black"
             >
-              <img
-                src="{{user.picture}}"
-                style="width:100%;border-radius:100%;"
-              />
+
+              {{#if user.picture}}
+                <img
+                  src="{{user.picture}}"
+                  style="width:100%;border-radius:100%;"
+                />
+
+              {{else}}
+
+                <div
+                  style="width:100%;height:100%;border-radius:100%;display:flex;justify-content:center;align-items:center;"
+                  class="has-background-black"
+                >
+                  <i
+                    class="fa-solid fa-user"
+                    style="font-size:38px;color:white;"
+                  ></i>
+                </div>
+              {{/if}}
+
             </div>
           </h1>
           <p class="description">{{user.name}}</p>

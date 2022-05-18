@@ -1,0 +1,101 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css"
+    />
+  </head>
+  <body>
+
+    <div
+      style="font-family:'nunito sans';position:relative;height:100vh;display:flex;"
+    >
+      <div
+        class="has-background-black-bis"
+        style="position:sticky;left:0;top:0;height:100%;width:350px;overflow-y:scroll;color:white;"
+      >
+        <div style="padding:20px">
+          <div style="margin-bottom:32px; cursor:pointer;color:white;">
+            <h1 class="title is-4" style="color:white;">Online Examination
+              System</h1>
+          </div>
+
+          {{#if isTeacher}}
+            <div>
+              <a
+                href="/users"
+                class="has-background-grey-darker is-block"
+                style="color:white;text-decoration:none;font-family:'nunito sans';font-size:20px;padding:16px 48px;border-radius:4px;cursor:pointer;margin-bottom:8px;"
+              >
+                <span style="">Users</span>
+              </a>
+              <a
+                href="/quiz"
+                class="has-background-grey-darker is-block"
+                style="color:white;text-decoration:none;font-family:'nunito sans';font-size:20px;background-color:red;padding:16px 48px;border-radius:4px;cursor:pointer;margin-bottom:8px;"
+              >
+                <span style="">Exams</span>
+              </a>
+              <a
+                href="/home/profile"
+                class="has-background-grey-darker is-block"
+                style="color:white;text-decoration:none;font-family:'nunito sans';font-size:20px;background-color:red;padding:16px 48px;border-radius:4px;cursor:pointer;margin-bottom:8px;"
+              >
+                <span style="">Profile</span>
+              </a>
+            </div>
+          {{else}}
+            <div>
+              <a
+                href="/home"
+                class="has-background-grey-darker is-block"
+                style="color:white;text-decoration:none;font-family:'nunito sans';font-size:20px;padding:16px 48px;border-radius:4px;cursor:pointer;margin-bottom:8px;"
+              >
+                <span style="">Home</span>
+              </a>
+              <a
+                href="/home/reports"
+                class="has-background-grey-darker is-block"
+                style="color:white;text-decoration:none;font-family:'nunito sans';font-size:20px;background-color:red;padding:16px 48px;border-radius:4px;cursor:pointer;margin-bottom:8px;"
+              >
+                <span style="">Report</span>
+              </a>
+              <a
+                href="/home/profile"
+                class="has-background-grey-darker is-block"
+                style="color:white;text-decoration:none;font-family:'nunito sans';font-size:20px;background-color:red;padding:16px 48px;border-radius:4px;cursor:pointer;margin-bottom:8px;"
+              >
+                <span style="">Profile</span>
+              </a>
+            </div>
+
+          {{/if}}
+
+        </div>
+      </div>
+      <div style="flex:1;overflow-y:scroll;padding:24px;">
+        <div>
+          {{#if isBackButtonAvailable}}
+             {{> back}} 
+          {{/if}}
+          {{{body}}}
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://kit.fontawesome.com/d4109a6bf5.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+  </body>
+</html>
