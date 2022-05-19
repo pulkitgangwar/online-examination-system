@@ -1,5 +1,5 @@
-import { RequestHandler } from "express";
-import { getSession, getUser } from "../helpers/helpers";
+import { AuthSession } from "../services/Session";
+import { Request } from "express";
 
 export const authenticate = async (
   req: any,
@@ -11,20 +11,30 @@ export const authenticate = async (
       res.redirect("/auth/google");
       return;
     }
-    const session = await getSession(req.signedCookies.sid);
+    const session = await AuthSession.findSession(req.signedCookies.sid);
+
+    // check session exists or not
     if (!session) {
       res.redirect("/auth/google");
       return;
     }
 
     // check expiry
+    if (session.expiresAt <= new Date()) {
+      await AuthSession.deleteSession(req.signedCookies.sid);
+      res.clearCookie("sid", {
+        httpOnly: true,
+        signed: true,
+      });
 
-    const user = await getUser(session.userId);
-    if (!user) {
       res.redirect("/auth/google");
       return;
     }
-    req.user = user;
+    res.locals.isTeacher = session.user.role === "TEACHER";
+    res.locals.isBackButtonAvailable =
+      req.originalUrl.split("/").filter((url: string) => url).length >= 2;
+
+    req.user = session.user;
 
     next();
   } catch (err) {
