@@ -14,8 +14,25 @@ import UserRoutes from "./routes/user";
 import QuizRoutes from "./routes/quiz";
 import AnnouncementRoutes from "./routes/announcement";
 import { authorizeUser } from "./middlewares/authorizeUser";
+import { prisma } from "./config/client";
+import { nanoid } from "nanoid";
 
 const app = express();
+
+const createUser = async () => {
+  try {
+    const user = await prisma.user.create({
+      data: {
+        id: nanoid(),
+        name: "api use",
+        email: "api.use.7211@gmail.com",
+        role: "TEACHER",
+      },
+    });
+  } catch (err) {
+    console.log(err, "inside create user");
+  }
+};
 
 // env config
 config();
@@ -59,6 +76,7 @@ app.use((req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
+createUser();
 app.listen(PORT, async () => {
   console.log(`server running on port ${PORT}`);
 });
