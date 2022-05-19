@@ -1,7 +1,7 @@
-// DisableDevtool({});
+DisableDevtool({});
 
-// window.onbeforeunload = () => "";
-// window.close = () => "";
+window.onbeforeunload = () => "";
+window.close = () => "";
 
 const socket = io();
 const myPeer = new Peer({
