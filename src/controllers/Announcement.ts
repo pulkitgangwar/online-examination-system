@@ -10,6 +10,7 @@ export class Announcement {
   ): Promise<void> {
     try {
       const announcements = await prisma.announcement.findMany({
+        orderBy: { updatedAt: "desc" },
         include: {
           user: {
             select: {
@@ -97,9 +98,36 @@ export class Announcement {
     req: RequestWithUser,
     res: Response
   ): Promise<void> {
-    const { description, id } = req.body;
-    // if (!description || id) return res.redirect("/announcement");
+    try {
+      const { description, id } = req.body;
+      if (!description || !id) return res.redirect("/announcement");
 
-    console.log(id);
+      const announcement = await prisma.announcement.update({
+        where: {
+          id,
+        },
+        data: {
+          description,
+          updatedAt: new Date(),
+        },
+      });
+
+      res.redirect("/announcement");
+    } catch (err) {
+      console.log(err, "err in ann controller");
+    }
+  }
+
+  static async deleteAnnouncement(
+    req: RequestWithUser,
+    res: Response
+  ): Promise<void> {
+    if (!req.params?.announcementId) return res.redirect("/announcement");
+
+    await prisma.announcement.delete({
+      where: { id: req.params.announcementId },
+    });
+
+    res.redirect("/announcement");
   }
 }

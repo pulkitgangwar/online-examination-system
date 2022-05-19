@@ -17,6 +17,7 @@
         <th><abbr title="Role">Role</abbr></th>
         <th><abbr title="Semester">Semester</abbr></th>
         <th><abbr title="Edit">Edit</abbr></th>
+        <th><abbr title="Report">Report</abbr></th>
       </tr>
     </thead>
 
@@ -30,6 +31,12 @@
           <td>{{this.role}}</td>
           <td>{{this.semester}}</td>
           <td><a href="/users/edit/{{this.id}}">Edit</a></td>
+
+          {{#if this.isUserStudent}}
+            <td><a href="/users/report/user/{{this.id}}">View Reports</a></td>
+          {{else}}
+            <td>-</td>
+          {{/if}}
         </tr>
       {{/each}}
     </tbody>

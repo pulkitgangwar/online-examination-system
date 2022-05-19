@@ -4,10 +4,22 @@ import { nanoid } from "nanoid";
 import { prisma } from "../config/client";
 import { parseTime } from "../utils/parseTime";
 import { parseDate } from "../utils/parseDate";
+import { parseDateAndTime } from "../utils/parseDateAndTime";
 
 export class Quiz {
   static async allQuiz(req: RequestWithUser, res: Response): Promise<void> {
-    const quizzes = await prisma.quiz.findMany();
+    const quizzes = await prisma.quiz.findMany({
+      orderBy: { createdAt: "desc" },
+
+      include: {
+        User: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
     const information: any = {};
     if ("_success" in req.query) {
       information.success = req.query["_success"];
@@ -18,11 +30,13 @@ export class Quiz {
 
     res.render("quiz/all-quiz", {
       quizzes: quizzes
-        .filter((quiz) => new Date() < new Date(quiz.endingDate))
+        .filter((quiz) => new Date() <= new Date(quiz.endingDate))
         .map((quiz) => ({
           ...quiz,
+          isEditable: quiz.userId === req.user.id,
+          isActive: new Date() >= new Date(quiz.startingDate),
           timeLimitInFormat: parseTime(quiz.timeLimit * 60),
-          startingDateInFormat: parseDate(
+          startingDateInFormat: parseDateAndTime(
             quiz.startingDate.toISOString()
           ).trim(),
           endingDateInFormat: parseDate(quiz.endingDate.toISOString()).trim(),
@@ -46,8 +60,10 @@ export class Quiz {
 
       const newQuiz = await prisma.quiz.create({
         data: {
+          userId: req.user.id,
           id: nanoid(),
           title: quiz.title,
+          semester: quiz.semester,
           description: quiz.description,
           endingDate: new Date(quiz.endingDate),
           startingDate: new Date(quiz.startingDate),
@@ -71,7 +87,7 @@ export class Quiz {
           error: "Something went wrong please try again later",
         });
 
-      res.status(200);
+      res.redirect("/quiz");
     } catch (err) {
       console.log(err);
       res.render("quiz/add-quiz", { error: err.message });

@@ -8,6 +8,7 @@ router.get("/quiz/start/:quizId", Root.startQuiz);
 router.post("/quiz/report", Root.generateReport);
 router.get("/reports", Root.showAllReports);
 router.get("/report/:reportId", Root.showReport);
+router.get("/announcement", Root.showAnnouncements);
 
 // router.get("/all-quiz", Root.readQuiz);
 

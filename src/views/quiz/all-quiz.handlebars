@@ -36,13 +36,30 @@
           <div class="content">
             <p>{{this.description}}</p>
             <p>Exam Starts On - {{this.startingDateInFormat}}</p>
-            <p>Exam Ends On - {{this.endingDateInFormat}}</p>
             <p>Time Limit - {{this.timeLimitInFormat}}</p>
+            <span
+              class="tag is-primary is-bold is-size-6"
+            >{{this.subject}}</span>
+            <span class="tag is-primary is-bold is-size-6">Semester
+              {{this.semester}}</span>
+            {{#if this.isActive}}
+              <span class="tag is-success is-bold is-size-6">Exam is active</span>
+            {{else}}
+              <span class="tag is-danger is-bold is-size-6">Exam is not active</span>
+            {{/if}}
+            <span
+              class="tag is-black is-bold is-size-6"
+            >{{this.User.name}}</span>
+
           </div>
         </div>
         <footer class="card-footer">
-          <a href="/quiz/view/{{this.id}}" class="card-footer-item">View</a>
-          <a href="/quiz/edit/{{this.id}}" class="card-footer-item">Edit</a>
+          {{!-- <a href="/quiz/view/{{this.id}}" class="card-footer-item">View</a> --}}
+          {{#if this.isEditable}}
+            <a href="/quiz/edit/{{this.id}}" class="card-footer-item">Edit</a>
+          {{else}}
+          {{/if}}
+
         </footer>
       </div>
     {{/each}}

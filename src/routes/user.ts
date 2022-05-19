@@ -9,5 +9,6 @@ router.post("/add", DbUser.addUserCallback);
 router.get("/edit/:id", DbUser.editUser);
 router.post("/edit/:id", DbUser.editUserCallback);
 router.get("/delete/:id", DbUser.deleteUser);
+router.get("/report/user/:userId", DbUser.showUserReports);
 
 export default router;

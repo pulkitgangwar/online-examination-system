@@ -4,11 +4,16 @@ import { prisma } from "../config/client";
 import { parseTime } from "../utils/parseTime";
 import { parseDate } from "../utils/parseDate";
 import { nanoid } from "nanoid";
+import { parseDateAndTime } from "../utils/parseDateAndTime";
 
 export class Root {
   static async home(req: RequestWithUser, res: Response): Promise<void> {
     const [quizzes, reports] = await Promise.all([
-      prisma.quiz.findMany(),
+      prisma.quiz.findMany({
+        where: {
+          semester: req.user.semester,
+        },
+      }),
       prisma.report.findMany({
         where: {
           user: {
@@ -35,7 +40,7 @@ export class Root {
             ),
             isActive: new Date() >= new Date(quiz.startingDate),
             timeLimitInFormat: parseTime(quiz.timeLimit * 60),
-            startingDateInFormat: parseDate(
+            startingDateInFormat: parseDateAndTime(
               quiz.startingDate.toISOString()
             ).trim(),
             endingDateInFormat: parseDate(quiz.endingDate.toISOString()).trim(),
@@ -294,4 +299,27 @@ export class Root {
   //     })),
   //   });
   // }
+
+  static async showAnnouncements(
+    req: RequestWithUser,
+    res: Response
+  ): Promise<void> {
+    const announcements = await prisma.announcement.findMany({
+      orderBy: { updatedAt: "desc" },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    res.render("home/announcements", {
+      announcements: announcements.map((announcement) => ({
+        ...announcement,
+        createdAt: parseDate(announcement.createdAt.toISOString()),
+      })),
+    });
+  }
 }

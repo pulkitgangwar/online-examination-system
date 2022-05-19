@@ -12,6 +12,7 @@ export interface RequestWithUser extends Request {
     name: string;
     id: string;
     picture: string;
+    semester: number;
   };
 }
 

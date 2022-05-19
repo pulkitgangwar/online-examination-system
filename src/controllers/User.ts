@@ -4,6 +4,8 @@ import { RequestWithUser } from "../interface/interface";
 import { AuthUser } from "../services/User";
 import { nanoid } from "nanoid";
 import { prisma } from "../config/client";
+import { parseDate } from "../utils/parseDate";
+import { parseTime } from "../utils/parseTime";
 
 export class DbUser {
   static async allUsers(req: RequestWithUser, res: Response) {
@@ -14,7 +16,9 @@ export class DbUser {
     }
 
     res.render("users/all-users", {
-      users: users.filter((user) => user.email !== req.user.email),
+      users: users
+        .filter((user) => user.email !== req.user.email)
+        .map((user) => ({ ...user, isUserStudent: user.role === "STUDENT" })),
     });
   }
 
@@ -47,7 +51,6 @@ export class DbUser {
       if (
         !req.body?.email ||
         !req.body?.name ||
-        !req.body?.year ||
         !req.body?.semester ||
         !req.body?.role
       ) {
@@ -62,7 +65,6 @@ export class DbUser {
           email: req.body.email,
           name: req.body.name,
           role: req.body.role,
-          year: parseInt(req.body.year),
           semester: parseInt(req.body.semester),
           updatedAt: new Date(),
         },
@@ -89,7 +91,6 @@ export class DbUser {
     if (
       !req.body?.email ||
       !req.body?.name ||
-      !req.body?.year ||
       !req.body?.semester ||
       !req.body?.role
     ) {
@@ -119,7 +120,6 @@ export class DbUser {
         name: req.body.name as string,
         picture: "",
         role: req.body.role as Role,
-        year: parseInt(req.body.year as string),
         id: nanoid(),
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -145,5 +145,42 @@ export class DbUser {
     if (!req.params?.id) return res.redirect("/users");
     await AuthUser.deleteUser(req.params.id);
     res.redirect("/users");
+  }
+
+  static async showUserReports(
+    req: RequestWithUser,
+    res: Response
+  ): Promise<void> {
+    try {
+      if (!req.params.userId) {
+        return res.redirect("/users");
+      }
+
+      const reports = await prisma.report.findMany({
+        where: {
+          userId: req.params.userId,
+        },
+        include: {
+          quiz: true,
+        },
+      });
+
+      if (!reports) {
+        console.log("no report found");
+      }
+
+      return res.render("users/reports", {
+        reports: reports.map((report) => ({
+          ...report,
+          startingDateInFormat: parseDate(
+            report.quiz.startingDate.toISOString()
+          ),
+          endingDateInFormat: parseDate(report.quiz.endingDate.toISOString()),
+          timeLimitInFormat: parseTime(report.quiz.timeLimit * 60),
+        })),
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

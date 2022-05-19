@@ -173,6 +173,7 @@ quizForm.addEventListener("submit", async (e) => {
   const startingDate = quizForm.querySelector(".add-quiz__starting-date").value;
   const endingDate = quizForm.querySelector(".add-quiz__ending-date").value;
   const timeLimit = quizForm.querySelector(".add-quiz__time-limit").value;
+  const semester = quizForm.querySelector(".add-quiz__semester").value;
   const negativeMarksPerQuestion = quizForm.querySelector(
     ".add-quiz__negative-marks-per-question"
   ).value;
@@ -209,6 +210,7 @@ quizForm.addEventListener("submit", async (e) => {
     description,
     questions,
     subject,
+    semester: parseInt(semester),
     negativeMarksPerQuestion,
     marksPerQuestion,
     startingDate,
@@ -228,6 +230,7 @@ quizForm.addEventListener("submit", async (e) => {
   });
 
   if (response) {
-    return window.location.push("/quiz");
+    window.location.href = response.url;
+    return;
   }
 });

@@ -10,7 +10,6 @@ export class AuthUser {
           name: user.name,
           picture: "",
           role: user.role,
-          year: user.year,
           semester: user.semester,
         },
       });
