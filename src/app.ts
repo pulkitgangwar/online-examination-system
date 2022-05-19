@@ -1,6 +1,6 @@
 import express from "express";
 import path from "path";
-import dotenv from "dotenv";
+import { config } from "dotenv";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { authenticate } from "./middlewares/authenticate";
@@ -18,7 +18,7 @@ import { authorizeUser } from "./middlewares/authorizeUser";
 const app = express();
 
 // env config
-dotenv.config();
+config();
 
 // body parser
 app.use(express.json());
