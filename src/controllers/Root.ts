@@ -280,6 +280,12 @@ export class Root {
     }
   }
 
+  static async invigilate(req: RequestWithUser, res: Response): Promise<void> {
+    res.render("home/invigilate", {
+      title: "invigilate",
+    });
+  }
+
   // : quizzes.filter((quiz) => new Date() > new Date(quiz.endingDate))
 
   // static async readQuiz(req: RequestWithUser, res: Response): Promise<void> {

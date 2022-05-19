@@ -218,7 +218,7 @@ quizForm.addEventListener("submit", async (e) => {
   const quizDetails = getAllQuizDetails();
 
   console.log(quizDetails);
-  const response = await fetch("http://localhost:3000/quiz/edit/callback", {
+  const response = await fetch("/quiz/edit/callback", {
     method: "POST",
     body: JSON.stringify(quizDetails),
     headers: {

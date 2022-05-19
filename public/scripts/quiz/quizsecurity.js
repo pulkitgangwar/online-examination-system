@@ -1,7 +1,20 @@
-DisableDevtool({});
+// DisableDevtool({});
 
-window.onbeforeunload = () => "";
-window.close = () => "";
+// window.onbeforeunload = () => "";
+// window.close = () => "";
+
+const socket = io();
+const myPeer = new Peer({
+  host: window.location.hostname,
+  port: window.location.port,
+  path: "/peer/video",
+});
+
+myPeer.on("open", (id) => {
+  // When we first open the app, have us join a room
+  socket.emit("join-room", "invigilate", id);
+});
+
 window.warnings = 0;
 
 const videoElement = document.querySelector(".quiz__camera__input-video");
@@ -9,11 +22,6 @@ const canvasElement = document.querySelector(".quiz__camera__output-video");
 const canvasCtx = canvasElement.getContext("2d");
 let escapeWarnings = 0;
 let facialDetectionWarnings = 0;
-
-setInterval(() => {
-  console.log(escapeWarnings);
-  console.log(facialDetectionWarnings);
-}, 1000);
 
 function onResults(results) {
   canvasCtx.save();
@@ -28,11 +36,11 @@ function onResults(results) {
   if (results.multiFaceLandmarks) {
     if (results.multiFaceLandmarks.length !== 1) {
       facialDetectionWarnings++;
-      swal({
-        title: "Facial Detection Warning",
-        text: "There should always be a single person on camera",
-        button: "Continue",
-      });
+      // swal({
+      //   title: "Facial Detection Warning",
+      //   text: "There should always be a single person on camera",
+      //   button: "Continue",
+      // });
     }
 
     for (const landmarks of results.multiFaceLandmarks) {
@@ -80,15 +88,32 @@ faceMesh.setOptions({
 });
 faceMesh.onResults(onResults);
 
-const camera = new Camera(videoElement, {
-  onFrame: async () => {
-    await faceMesh.send({ image: videoElement });
-  },
-  width: 200,
-  height: 112.5,
-});
-
 document.body.requestFullscreen({
   navigationUI: "hide",
 });
-camera.start();
+
+navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+  videoElement.srcObject = stream;
+  sendToMediaPipe();
+  socket.on("user-connected", (userId) => {
+    // If a new user connect
+    console.log("User Connected", userId);
+    setTimeout(connectToNewUser, 1000, userId, stream);
+  });
+});
+
+function connectToNewUser(userId, stream) {
+  // This runs when someone joins our room
+  const call = myPeer.call(userId, stream); // Call the user who just joined
+  console.log(call);
+}
+
+const sendToMediaPipe = async () => {
+  // if (!videoElement.videoWidth) {
+  //   console.log(videoElement.videoWidth);
+  //   requestAnimationFrame(sendToMediaPipe);
+  // } else {
+  await faceMesh.send({ image: videoElement });
+  requestAnimationFrame(sendToMediaPipe);
+  // }
+};

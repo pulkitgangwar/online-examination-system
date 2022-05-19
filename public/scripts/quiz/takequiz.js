@@ -215,7 +215,7 @@ function submitQuiz(_examData, userAnswersWithQuestion) {
     })),
   };
 
-  fetch(`http://localhost:3000/home/quiz/report`, {
+  fetch(`/home/quiz/report`, {
     method: "POST",
     headers: {
       "content-type": "application/json",

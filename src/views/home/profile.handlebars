@@ -74,6 +74,6 @@
   logoutBtn.addEventListener("click",(e) => { e.preventDefault(); swal({ title:
   `Are you sure?`, icon:`warning`, buttons: true, dangerMode: true,
   }).then(willDelete => { if(!willDelete) { return; }
-  fetch(`http://localhost:3000/auth/logout`).then(response => { if(response) {
+  fetch(`/auth/logout`).then(response => { if(response) {
   window.location.href= response.url; } } ); }) })
 </script>

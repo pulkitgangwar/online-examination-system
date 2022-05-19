@@ -218,7 +218,7 @@ quizForm.addEventListener("submit", async (e) => {
     timeLimit,
   };
 
-  const response = await fetch(`http://localhost:3000/quiz/add/callback`, {
+  const response = await fetch(`/quiz/add/callback`, {
     method: "post",
     body: JSON.stringify(quiz),
     headers: {

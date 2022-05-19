@@ -48,5 +48,5 @@
   sure?`, text: `Once deleted, you will not be able to recover this
   announcement`, icon: `warning`, buttons: true, dangerMode: true,
   }).then(willDelete => { if(!willDelete) { return; }
-  fetch(`http://localhost:3000/announcement/delete/${announcementId}`,{method:"DELETE"}).then(response => { if(response) { window.location.href= response.url } } ) }) }
+  fetch(`/announcement/delete/${announcementId}`,{method:"DELETE"}).then(response => { if(response) { window.location.href= response.url } } ) }) }
 </script>
