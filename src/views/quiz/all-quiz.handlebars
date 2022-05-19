@@ -54,7 +54,10 @@
           </div>
         </div>
         <footer class="card-footer">
-          {{!-- <a href="/quiz/view/{{this.id}}" class="card-footer-item">View</a> --}}
+          <a
+            href="/home/quiz/start/{{this.id}}"
+            class="card-footer-item"
+          >Preview</a>
           {{#if this.isEditable}}
             <a href="/quiz/edit/{{this.id}}" class="card-footer-item">Edit</a>
           {{else}}
