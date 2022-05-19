@@ -2,4 +2,6 @@ node_modules
 database.sqlite
 .env
 
-src/prisma/migrations
+
+.DS_Store
+*/.DS_Store
