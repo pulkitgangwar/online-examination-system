@@ -5,7 +5,9 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { authenticate } from "./middlewares/authenticate";
 import { engine } from "express-handlebars";
-import { readdirSync, readFileSync } from "fs";
+import http from "http";
+import { Server } from "socket.io";
+import { ExpressPeerServer } from "peer";
 // routes
 import AuthRoutes from "./routes/auth";
 import RootRoutes from "./routes/root";
@@ -16,6 +18,11 @@ import AnnouncementRoutes from "./routes/announcement";
 import { authorizeUser } from "./middlewares/authorizeUser";
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, { allowEIO3: true });
+const peerServer = ExpressPeerServer(server, { path: "/video" });
+
+app.use("/peer", peerServer);
 
 // env config
 dotenv.config();
@@ -58,7 +65,21 @@ app.use((req, res) => {
   res.status(404).render("404", { layout: "main" });
 });
 
+io.on("connection", (socket) => {
+  // When someone attempts to join the room
+  socket.on("join-room", (roomId, userId) => {
+    socket.join(roomId); // Join the room
+    socket.broadcast.emit("user-connected", userId); // Tell everyone that we joined
+
+    // Communicate the disconnection
+    socket.on("disconnect", () => {
+      socket.broadcast.emit("user-disconnected", userId);
+    });
+  });
+});
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, async () => {
+
+server.listen(PORT, async () => {
   console.log(`server running on port ${PORT}`);
 });
