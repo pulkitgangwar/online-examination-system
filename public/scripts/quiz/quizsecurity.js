@@ -1,10 +1,14 @@
-DisableDevtool({});
+// DisableDevtool({});
 
-window.onbeforeunload = () => "";
-window.close = () => "";
+// window.onbeforeunload = () => "";
+// window.close = () => "";
 
 const socket = io();
-const myPeer = new Peer({ host: "localhost", port: 3000, path: "/peer/video" });
+const myPeer = new Peer({
+  host: window.location.hostname,
+  port: window.location.port,
+  path: "/peer/video",
+});
 
 myPeer.on("open", (id) => {
   // When we first open the app, have us join a room
@@ -19,11 +23,6 @@ const canvasCtx = canvasElement.getContext("2d");
 let escapeWarnings = 0;
 let facialDetectionWarnings = 0;
 
-setInterval(() => {
-  console.log(escapeWarnings);
-  console.log(facialDetectionWarnings);
-}, 1000);
-
 function onResults(results) {
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
@@ -37,11 +36,11 @@ function onResults(results) {
   if (results.multiFaceLandmarks) {
     if (results.multiFaceLandmarks.length !== 1) {
       facialDetectionWarnings++;
-      swal({
-        title: "Facial Detection Warning",
-        text: "There should always be a single person on camera",
-        button: "Continue",
-      });
+      // swal({
+      //   title: "Facial Detection Warning",
+      //   text: "There should always be a single person on camera",
+      //   button: "Continue",
+      // });
     }
 
     for (const landmarks of results.multiFaceLandmarks) {

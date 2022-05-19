@@ -95,7 +95,7 @@
   sure?`, text: `Once deleted, you will not be able to recover this user`, icon:
   `warning`, buttons: true, dangerMode: true, }).then(willDelete => {
   if(!willDelete) { return; }
-  fetch(`http://localhost:3000/users/delete/${userId}`).then(response => {
+  fetch(`/users/delete/${userId}`).then(response => {
   if(response) { window.location.href= response.url; } } ); }) }
 
 </script>
