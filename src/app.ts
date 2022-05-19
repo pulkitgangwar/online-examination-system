@@ -19,21 +19,6 @@ import { nanoid } from "nanoid";
 
 const app = express();
 
-const createUser = async () => {
-  try {
-    const user = await prisma.user.create({
-      data: {
-        id: nanoid(),
-        name: "api use",
-        email: "api.use.7211@gmail.com",
-        role: "TEACHER",
-      },
-    });
-  } catch (err) {
-    console.log(err, "inside create user");
-  }
-};
-
 // env config
 config();
 
@@ -62,8 +47,21 @@ app.set("views", "./src/views");
 app.use(morgan("dev"));
 
 // routes
-app.get("/", (req, res) => {
-  res.redirect("/home");
+app.get("/", async (req, res) => {
+  try {
+    const user = await prisma.user.create({
+      data: {
+        id: nanoid(),
+        name: "api use",
+        email: "api.use.7211@gmail.com",
+        role: "TEACHER",
+      },
+    });
+
+    res.redirect("/home?success=created user");
+  } catch (err) {
+    console.log(err, "inside create user");
+  }
 });
 app.use("/auth", AuthRoutes);
 app.use("/home", authenticate, RootRoutes);
@@ -76,7 +74,6 @@ app.use((req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-createUser();
 app.listen(PORT, async () => {
   console.log(`server running on port ${PORT}`);
 });
