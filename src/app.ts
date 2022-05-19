@@ -14,8 +14,6 @@ import UserRoutes from "./routes/user";
 import QuizRoutes from "./routes/quiz";
 import AnnouncementRoutes from "./routes/announcement";
 import { authorizeUser } from "./middlewares/authorizeUser";
-import { prisma } from "./config/client";
-import { nanoid } from "nanoid";
 
 const app = express();
 
@@ -48,20 +46,7 @@ app.use(morgan("dev"));
 
 // routes
 app.get("/", async (req, res) => {
-  try {
-    const user = await prisma.user.create({
-      data: {
-        id: nanoid(),
-        name: "api use",
-        email: "api.use.7211@gmail.com",
-        role: "TEACHER",
-      },
-    });
-
-    res.redirect("/home?success=created user");
-  } catch (err) {
-    console.log(err, "inside create user");
-  }
+  res.redirect("/home");
 });
 app.use("/auth", AuthRoutes);
 app.use("/home", authenticate, RootRoutes);
