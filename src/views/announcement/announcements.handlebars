@@ -17,10 +17,16 @@
           </p>
 
           <div style="display:flex;justify-content:space-between;">
-            <time
-              style="font-size:16px;font-weight:bold;"
-              datetime="2016-1-1"
-            >{{this.createdAt}}</time>
+            <div>
+
+              <time
+                style="font-size:16px;font-weight:bold;"
+                datetime="2016-1-1"
+              >{{this.createdAt}}</time>
+
+              <span class="tag is-primary is-size-6">Semester
+                {{this.semester}}</span>
+            </div>
             <span class="tag is-black is-size-6">{{this.user.name}}</span>
           </div>
 

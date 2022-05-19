@@ -311,6 +311,9 @@ export class Root {
     res: Response
   ): Promise<void> {
     const announcements = await prisma.announcement.findMany({
+      where: {
+        semester: req.user.semester,
+      },
       orderBy: { updatedAt: "desc" },
       include: {
         user: {

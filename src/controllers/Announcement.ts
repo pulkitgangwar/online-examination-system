@@ -2,6 +2,7 @@ import { RequestWithUser } from "../interface/interface";
 import { Response } from "express";
 import { prisma } from "../config/client";
 import { parseDate } from "../utils/parseDate";
+import { parseDateAndTime } from "../utils/parseDateAndTime";
 
 export class Announcement {
   static async showAllAnnoucements(
@@ -25,7 +26,7 @@ export class Announcement {
         announcements: announcements.map((announcement) => ({
           ...announcement,
           isEditable: announcement.user.id === req.user.id,
-          createdAt: parseDate(announcement.createdAt.toISOString()),
+          createdAt: parseDateAndTime(announcement.createdAt.toISOString()),
         })),
       });
     } catch (err) {
@@ -45,9 +46,12 @@ export class Announcement {
     res: Response
   ): Promise<void> {
     try {
-      const { description }: { description: string } = req.body;
+      const {
+        description,
+        semester,
+      }: { description: string; semester: string } = req.body;
 
-      if (!description) {
+      if (!description || !semester) {
         return res.render("announcement/add", {
           error: "please provide announcement",
         });
@@ -56,6 +60,7 @@ export class Announcement {
       const announcement = await prisma.announcement.create({
         data: {
           description,
+          semester: parseInt(semester),
           userId: req.user.id,
         },
       });
@@ -99,7 +104,7 @@ export class Announcement {
     res: Response
   ): Promise<void> {
     try {
-      const { description, id } = req.body;
+      const { description, id, semester } = req.body;
       if (!description || !id) return res.redirect("/announcement");
 
       const announcement = await prisma.announcement.update({
@@ -108,6 +113,7 @@ export class Announcement {
         },
         data: {
           description,
+          semester: parseInt(semester),
           updatedAt: new Date(),
         },
       });

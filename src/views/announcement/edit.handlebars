@@ -11,7 +11,10 @@
   <input name="id" type="text" value="{{id}}" style="display:none;" required />
 
   <div class="field is-vertical">
-    <label class="label" for="add-user__announcement-input">Announcement</label>
+    <label
+      class="label"
+      for="edit-announcement__announcement-input"
+    >Announcement</label>
     <div class="field-body">
       <div class="field">
         <p class="control">
@@ -19,12 +22,34 @@
             name="description"
             class="textarea"
             placeholder="Enter Announcement"
-            id="add-user__announcement-input"
+            id="edit-announcement__announcement-input"
             rows="10"
             required
           >{{description}}</textarea>
         </p>
       </div>
+    </div>
+  </div>
+
+  <div class="field is-vertical">
+    <label
+      class="label"
+      for="edit-announcement__semester-input"
+    >Semester</label>
+    <div class="select" style="width:100%">
+      <select
+        required
+        name="semester"
+        class="add-announcement__semester-input"
+        style="width:100%"
+      >
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
     </div>
   </div>
 
@@ -44,8 +69,8 @@
 </form>
 
 <script>
-  function handleDelete(announcementId) { const willDelete = swal({ title: `Are you
-  sure?`, text: `Once deleted, you will not be able to recover this
+  function handleDelete(announcementId) { const willDelete = swal({ title: `Are
+  you sure?`, text: `Once deleted, you will not be able to recover this
   announcement`, icon: `warning`, buttons: true, dangerMode: true,
   }).then(willDelete => { if(!willDelete) { return; }
   fetch(`/announcement/delete/${announcementId}`,{method:"DELETE"}).then(response => { if(response) { window.location.href= response.url } } ) }) }
