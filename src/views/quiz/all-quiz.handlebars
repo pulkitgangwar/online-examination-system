@@ -34,7 +34,6 @@
         </header>
         <div class="card-content">
           <div class="content">
-            <p>{{this.description}}</p>
             <p>Exam Starts On - {{this.startingDateInFormat}}</p>
             <p>Time Limit - {{this.timeLimitInFormat}}</p>
             <span
@@ -58,6 +57,7 @@
             href="/home/quiz/start/{{this.id}}"
             class="card-footer-item"
           >Preview</a>
+          <a href="/quiz/invigilate" class="card-footer-item">Invigilate</a>
           {{#if this.isEditable}}
             <a href="/quiz/edit/{{this.id}}" class="card-footer-item">Edit</a>
           {{else}}

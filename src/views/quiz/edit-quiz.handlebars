@@ -1,77 +1,237 @@
 {{error}}
 
-<a class="edit-quiz__delete" href="/quiz/delete/{{id}}">Delete Quiz </a>
+{{!-- <a class="edit-quiz__delete" href="/quiz/delete/{{id}}">Delete Quiz </a> --}}
 
 <form class="edit-quiz" id="{{id}}">
-  <input
-    name="title"
-    type="text"
-    class="edit-quiz__title"
-    placeholder="Enter a title"
-    value="{{quiz.title}}"
-    required
-  />
-  <input
-    name="description"
-    class="edit-quiz__description"
-    type="text"
-    placeholder="Enter description"
-    value="{{quiz.description}}"
-    required
-  />
-  <input
-    type="text"
-    placeholder="Enter Subject"
-    class="edit-quiz__subject"
-    name="subject"
-    required
-    value="{{quiz.subject}}"
-  />
-  <input
-    type="datetime-local"
-    name="startingDate"
-    class="edit-quiz__starting-date"
-    required
-    value="{{startingDate}}"
-  />
-  <input
-    type="datetime-local"
-    name="endingDate"
-    class="edit-quiz__ending-date"
-    value="{{endingDate}}"
-    required
-  />
-  <input
-    placeholder="Enter time limit of examination in minutes"
-    type="number"
-    class="edit-quiz__time-limit"
-    value="{{quiz.timeLimit}}"
-  />
+  <h3 class="title is-2">Edit Exam</h3>
 
-  <input
-    type="number"
-    step="any"
-    placeholder="Marks per question"
-    class="edit-quiz__marks-per-question"
-    name="marksPerQuestion"
-    value="{{quiz.marksPerQuestion}}"
-    required
-  />
-  <input
-    type="number"
-    step="any"
-    placeholder="Negative marks per question"
-    name="negativeMarksPerQuestion"
-    class="edit-quiz__negative-marks-per-question"
-    value="{{quiz.negativeMarksPerQuestion}}"
-    required
-  />
+  <div class="columns">
+    <div class="column">
+      <div class="field is-vertical">
+        <label class="label" for="edit-quiz__title-input">Title</label>
+        <div class="field-body">
+          <div class="field">
+            <p class="control">
+              <input
+                id="edit-quiz__title-input"
+                name="title"
+                type="text"
+                class="input edit-quiz__title"
+                placeholder="Enter a title"
+                value="{{quiz.title}}"
+                required
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+
+      <div class="field is-vertical">
+        <label
+          class="label"
+          for="edit-quiz__description-input"
+        >Description</label>
+        <div class="field-body">
+          <div class="field">
+            <p class="control">
+              <input
+                id="edit-quiz__description-input"
+                name="description"
+                class="input edit-quiz__description"
+                type="text"
+                placeholder="Enter description"
+                value="{{quiz.description}}"
+                required
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column">
+      <div class="field is-vertical">
+        <label class="label" for="edit-quiz__subject-input">Subject</label>
+        <div class="field-body">
+          <div class="field">
+            <p class="control">
+              <input
+                id="edit-quiz__subject-input"
+                type="text"
+                placeholder="Enter Subject"
+                class="input edit-quiz__subject"
+                name="subject"
+                required
+                value="{{quiz.subject}}"
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="field is-vertical">
+        <label class="label" for="add-quiz__time-limit-input">Time Limit</label>
+        <div class="field-body">
+          <div class="field">
+            <p class="control">
+              <input
+                name="timeLimit"
+                id="edit-quiz__time-limit-input"
+                placeholder="Enter time limit in minutes"
+                type="number"
+                class="input edit-quiz__time-limit"
+                value="{{quiz.timeLimit}}"
+                required
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column">
+      <div class="field is-vertical">
+        <label class="label" for="edit-quiz__starting-date-input">Starting Date</label>
+        <div class="field-body">
+          <div class="field">
+            <p class="control">
+              <input
+                id="edit-quiz__starting-date-input"
+                type="datetime-local"
+                name="startingDate"
+                class="input edit-quiz__starting-date"
+                required
+                value="{{startingDate}}"
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="field is-vertical">
+        <label class="label" for="edit-quiz__ending-date-input">Ending Date</label>
+        <div class="field-body">
+          <div class="field">
+            <p class="control">
+              <input
+                id="edit-quiz__ending-date-input"
+                type="datetime-local"
+                name="endingDate"
+                class="input edit-quiz__ending-date"
+                value="{{endingDate}}"
+                required
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column">
+      <div class="field is-vertical">
+        <label class="label" for="edit-quiz__marks-per-question-input">Marks Per
+          Question</label>
+        <div class="field-body">
+          <div class="field">
+            <p class="control">
+              <input
+                id="edit-quiz__marks-per-question-input"
+                type="number"
+                step="any"
+                placeholder="Marks per question"
+                class="input edit-quiz__marks-per-question"
+                name="marksPerQuestion"
+                value="{{quiz.marksPerQuestion}}"
+                required
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="field is-vertical">
+        <label
+          class="label"
+          for="add-quiz__negative-marks-per-question-input"
+        >Negative Marks Per Question</label>
+        <div class="field-body">
+          <div class="field">
+            <p class="control">
+              <input
+                id="edit-quiz__negative-marks-per-question-input"
+                type="number"
+                step="any"
+                placeholder="Negative marks per question"
+                name="negativeMarksPerQuestion"
+                class="input edit-quiz__negative-marks-per-question"
+                value="{{quiz.negativeMarksPerQuestion}}"
+                required
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field is-vertical">
+    <label class="label" for="add-quiz__semester-input">Semester</label>
+    <div class="select" style="width:100%">
+      <select
+        required
+        name="semester"
+        class="edit-quiz__semester"
+        style="width:100%"
+      >
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
+    </div>
+  </div>
+
+  <h3 class="title is-2">Questions</h3>
 
   <div class="edit-quiz__questions quiz-questions">
 
   </div>
-  <button class="question__add-button" type="button">add question</button>
-  <button type="submit">create quiz</button>
+
+  <div class="buttons">
+
+    <button
+      type="button"
+      class="question__add-button button is-primary is-block is-medium"
+    >
+      <i class="fa-solid fa-plus"></i>
+      Add question
+    </button>
+    <button type="submit" class="button is-primary is-block is-medium">Update
+      quiz</button>
+    <button
+      type="button"
+      class="button is-danger is-block is-medium edit-quiz__delete-button"
+    >Delete Quiz</button>
+  </div>
+  {{! <button class="question__add-button" type="button">add question</button>
+  <button type="submit">create quiz</button> }}
 
 </form>
 

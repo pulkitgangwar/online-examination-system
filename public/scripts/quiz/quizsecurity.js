@@ -2,6 +2,7 @@ DisableDevtool({});
 
 window.onbeforeunload = () => "";
 window.close = () => "";
+let focusChangeWarning = 0;
 
 const socket = io();
 const myPeer = new Peer({
@@ -36,11 +37,11 @@ function onResults(results) {
   if (results.multiFaceLandmarks) {
     if (results.multiFaceLandmarks.length !== 1) {
       facialDetectionWarnings++;
-      // swal({
-      //   title: "Facial Detection Warning",
-      //   text: "There should always be a single person on camera",
-      //   button: "Continue",
-      // });
+      swal({
+        title: "Facial Detection Warning",
+        text: "There should always be a single person on camera",
+        button: "Continue",
+      });
     }
 
     for (const landmarks of results.multiFaceLandmarks) {
@@ -117,3 +118,21 @@ const sendToMediaPipe = async () => {
   requestAnimationFrame(sendToMediaPipe);
   // }
 };
+
+// window.addEventListener("focus", function (event) {
+//   console.log("has focus");
+// });
+
+window.addEventListener("blur", function (event) {
+  console.log("lost focus");
+
+  focusChangeWarning++;
+  swal({
+    title: "Exam Focus Change Detected",
+    text: "You are not allowed to leave exam page ",
+    button: "Okay",
+    icon: "warning",
+  });
+});
+
+// console.log(_examData, submitQuiz, userAnswersWithQuestion);

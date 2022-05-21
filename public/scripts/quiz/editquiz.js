@@ -2,6 +2,8 @@ const addQuestionBtn = document.querySelector(".question__add-button");
 const editQuizQuestionsContainer = document.querySelector(
   ".edit-quiz__questions"
 );
+const deleteQuizBtn = document.querySelector(".edit-quiz__delete-button");
+const quizForm = document.querySelector(".edit-quiz");
 
 const checkNoOfQuestions = () => {
   return [...document.querySelectorAll(".quiz-questions__container")].length;
@@ -12,61 +14,131 @@ const getQuestionHtml = (question) => {
   const isCorrectAnswer = (index) => question.correctAnswer === index;
   console.log(question.id);
   const html = `
-    <input
-      type="text"
-      placeholder="enter a question"
-      name="question"
-      class="quiz-questions__question"
-      value='${question.question}'
-      required
-    />
-    
-    <input
-      type="text"
-      placeholder="option 1"
-      name="option"
-      class="quiz-questions__option"
-      value='${question.options[0]}'
-      required
-    />
+    <div class="field is-vertical">
+          <label class="label" for="quiz-questions__question-input">Question</label>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <input
+                  name="question"
+                  class="input quiz-questions__question"
+                  id="quiz-questions__question-input"
+                  type="text"
+                  placeholder="Enter question"
+                  required
+                  value=${question.question}
+                />
+              </p>
+            </div>
+          </div>
+        </div>
 
-    <input
-      type="text"
-      placeholder="option 2"
-      name="option"
-      class="quiz-questions__option"
-      
-      value='${question.options[1]}'
-      required
-    />
-    <input
-      type="text"
-      placeholder="option 3"
-      name="option"
-      class="quiz-questions__option"
-      value='${question.options[2]}'
-      required
-    />
-    <input
-      type="text"
-      placeholder="option 4"
-      name="option"
-      class="quiz-questions__option"
-      value='${question.options[3]}'
-      required
-    />
-    <select required name="option-correct"
-    placeholder="correct option"
-    class="quiz-questions__correct-answer">
-      <option value="0" selected=${isCorrectAnswer(0) ? true : false}>a</option>
-      <option value="1" selected=${isCorrectAnswer(1) ? true : false}>b</option>
-      <option value="2" selected=${isCorrectAnswer(2) ? true : false}>c</option>
-      <option value="3" selected=${isCorrectAnswer(3) ? true : false}>d</option>
-    </select>
+        <div class="columns">
+        <div class="column">
+        <div class="field is-vertical">
+          <label class="label" for="quiz-questions__option-one-input">Option 1</label>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <input
+                  name="option"
+                  class="input quiz-questions__option"
+                  id="quiz-questions__option-one-input"
+                  type="text"
+                  placeholder="Enter option"
+                  required
+                  value=${question.options[0]}
+                />
+              </p>
+            </div>
+          </div>
+        </div>
+        </div>
 
-    <button onclick="removeQuestion(this)" type="button" id='${
-      question.id
-    }'>remove</button>
+        
+        <div class="column">
+        <div class="field is-vertical">
+          <label class="label" for="quiz-questions__option-two-input">Option 2</label>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <input
+                  name="option"
+                  class="input quiz-questions__option"
+                  id="quiz-questions__option-two-input"
+                  type="text"
+                  placeholder="Enter option"
+                  required
+                  value=${question.options[1]}
+                />
+              </p>
+            </div>
+          </div>
+        </div>
+        </div>
+
+
+        <div class="column">
+        <div class="field is-vertical">
+          <label class="label" for="quiz-questions__option-three-input">Option 3</label>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <input
+                  name="option"
+                  class="input quiz-questions__option"
+                  id="quiz-questions__option-three-input"
+                  type="text"
+                  placeholder="Enter option"
+                  required
+                  value=${question.options[2]}
+                />
+              </p>
+            </div>
+          </div>
+        </div>
+        </div>
+
+
+
+        <div class="column">
+        <div class="field is-vertical">
+          <label class="label" for="quiz-questions__option-four-input">Option 4</label>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <input
+                  name="option"
+                  class="input quiz-questions__option"
+                  id="quiz-questions__option-four-input"
+                  type="text"
+                  placeholder="Enter option"
+                  required
+                  value=${question.options[3]}
+                />
+              </p>
+            </div>
+          </div>
+        </div>
+        </div>
+        
+
+        </div>
+
+
+        <div class="field is-vertical mb-6">
+            <label class="label" for="quiz-questions__correct-answer-input">Correct Answer</label>
+            <div class="select" style="width:100%">
+              <select required name="option-correct" class="quiz-questions__correct-answer" style="width:100%">
+                <option value="0" selected=${isCorrectAnswer(0)}>1</option>
+                <option value="1" selected=${isCorrectAnswer(1)}>2</option>
+                <option value="2" selected=${isCorrectAnswer(2)}>3</option>
+                <option value="3" selected=${isCorrectAnswer(3)}>4</option>
+              </select>
+            </div>
+          </div>
+
+  
     
    
 `;
@@ -74,13 +146,21 @@ const getQuestionHtml = (question) => {
   return html;
 };
 
+const buttonHtml = (id) => `
+      <button
+      class="button is-danger is-block is-medium"
+      type="button"
+      onclick="removeQuestion('${id}')" id='${id}'>Remove</button>
+
+      <hr />
+  `;
+
 const addAllStoredQuestions = () => {
-  questions.map((question) => {
+  questions.forEach((question) => {
     const div = document.createElement("div");
     div.classList.add(
       ...[
         "quiz-questions__container",
-        "quiz-questions__container--stored-question",
         `quiz-questions__container--${question.id}`,
       ]
     );
@@ -88,65 +168,43 @@ const addAllStoredQuestions = () => {
     div.id = question.id;
     console.log("allallstoredQuestions", question.id);
 
-    div.innerHTML = getQuestionHtml(question);
+    div.innerHTML = `${getQuestionHtml(question)}${buttonHtml(question.id)}`;
     editQuizQuestionsContainer.appendChild(div);
   });
 };
 
 addQuestionBtn.addEventListener("click", (e) => {
+  e.preventDefault();
   const clientQuestionId = window.crypto.randomUUID();
   const div = document.createElement("div");
   div.classList.add(
     ...[
       "quiz-questions__container",
-      "quiz-questions__container--new-question",
       `quiz-questions__container--${clientQuestionId}`,
     ]
   );
   div.id = clientQuestionId;
-  div.innerHTML = getQuestionHtml({
+  div.innerHTML = `${getQuestionHtml({
     id: clientQuestionId,
     question: "",
-    options: ["", "", "", ""],
+    options: ["", "pulkit", "", ""],
     correctAnswer: 0,
-  });
+  })}${buttonHtml(clientQuestionId)}`;
 
   editQuizQuestionsContainer.appendChild(div);
 });
 
-function removeQuestion(e) {
+function removeQuestion(id) {
   if (checkNoOfQuestions() <= 1) {
     return;
   }
 
-  const container = document.querySelector(
-    `.quiz-questions__container--${e.id}`
-  );
-
-  const question = container.querySelector(".quiz-questions__question").value;
-  const options = [...container.querySelectorAll(".quiz-questions__option")];
-  const correctAnswerIndex = parseInt(
-    container.querySelector(".quiz-questions__correct-answer").value
-  );
-  const correctAnswer = options[correctAnswerIndex].value;
-  if (
-    container.classList.contains("quiz-questions__container--stored-question")
-  ) {
-    removedQuestions.push({
-      id: e.id,
-      question,
-      correctAnswer,
-      correctAnswerIndex,
-      options: options.map((option) => option.value),
-    });
-  }
+  const container = document.querySelector(`.quiz-questions__container--${id}`);
 
   container.remove();
-  console.log(removedQuestions);
 }
 
 const getAllQuizDetails = () => {
-  const quizForm = document.querySelector(".edit-quiz");
   const title = quizForm.querySelector(".edit-quiz__title").value;
   const description = quizForm.querySelector(".edit-quiz__description").value;
   const startingDate = quizForm.querySelector(
@@ -154,6 +212,7 @@ const getAllQuizDetails = () => {
   ).value;
   const endingDate = quizForm.querySelector(".edit-quiz__ending-date").value;
   const timeLimit = quizForm.querySelector(".edit-quiz__time-limit").value;
+  const semester = quizForm.querySelector(".edit-quiz__semester").value;
   const negativeMarksPerQuestion = quizForm.querySelector(
     ".edit-quiz__negative-marks-per-question"
   ).value;
@@ -176,9 +235,6 @@ const getAllQuizDetails = () => {
       questionDiv.querySelector(".quiz-questions__correct-answer").value
     );
     const correctAnswer = options[correctAnswerIndex].value;
-    const isNewQuestion = questionDiv.classList.contains(
-      "quiz-questions__container--new-question"
-    );
 
     return {
       id: window.crypto.randomUUID(),
@@ -186,11 +242,8 @@ const getAllQuizDetails = () => {
       options: options.map((option) => option.value),
       correctAnswer,
       correctAnswerIndex,
-      isNewQuestion,
     };
   });
-
-  console.log(quizForm);
 
   const quiz = {
     id: quizForm.id,
@@ -198,12 +251,12 @@ const getAllQuizDetails = () => {
     description,
     questions,
     subject,
-    negativeMarksPerQuestion,
-    marksPerQuestion,
+    negativeMarksPerQuestion: parseFloat(negativeMarksPerQuestion),
+    marksPerQuestion: parseFloat(marksPerQuestion),
     startingDate,
     endingDate,
-    timeLimit,
-    removedQuestions,
+    timeLimit: parseFloat(timeLimit),
+    semester: parseInt(semester),
   };
 
   return quiz;
@@ -211,19 +264,41 @@ const getAllQuizDetails = () => {
 
 addAllStoredQuestions();
 
-const quizForm = document.querySelector(".edit-quiz");
-
 quizForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const quizDetails = getAllQuizDetails();
 
-  console.log(quizDetails);
+  // console.log(quizDetails);
   const response = await fetch("/quiz/edit/callback", {
     method: "POST",
     body: JSON.stringify(quizDetails),
     headers: {
       "content-type": "application/json",
     },
+  });
+
+  if (response) {
+    window.location.href = response.url;
+  }
+});
+
+deleteQuizBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
+  const willDelete = await swal({
+    title: `Are you
+  sure?`,
+    text: `Once deleted, you will not be able to recover this exam`,
+    icon: `warning`,
+    buttons: true,
+    dangerMode: true,
+  });
+
+  if (!willDelete) {
+    return;
+  }
+
+  const response = await fetch(`/quiz/delete/${quizForm.id}`, {
+    method: "DELETE",
   });
 
   if (response) {

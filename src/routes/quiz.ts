@@ -9,5 +9,6 @@ router.post("/add/callback", Quiz.addQuizCallback);
 router.get("/edit/:quizId", Quiz.editQuiz);
 router.post("/edit/callback", Quiz.editQuizCallback);
 router.delete("/delete/:quizId", Quiz.deleteQuiz);
+router.get("/invigilate", Quiz.invigilate);
 
 export default router;

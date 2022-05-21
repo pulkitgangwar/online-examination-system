@@ -20,6 +20,7 @@ export class Quiz {
         },
       },
     });
+
     const information: any = {};
     if ("_success" in req.query) {
       information.success = req.query["_success"];
@@ -119,49 +120,39 @@ export class Quiz {
   ): Promise<void> {
     try {
       const quiz = req.body;
-      console.log(quiz);
 
-      res
-        .status(200)
-        .redirect("/quiz?_error=editing exams is not supported yet.");
+      const oldQuiz = await prisma.quiz.delete({
+        where: { id: quiz.id },
+        include: {
+          Questions: true,
+        },
+      });
 
-      // const response = await prisma.quiz.update({
-      //   where: { id: quiz.id },
-      //   data: {
-      //     title: quiz.title,
-      //     description: quiz.description,
-      //     endingDate: new Date(quiz.endingDate),
-      //     startingDate: new Date(quiz.startingDate),
-      //     timeLimit: parseInt(quiz.timeLimit),
-      //     marksPerQuestion: parseFloat(quiz.marksPerQuestion),
-      //     negativeMarksPerQuestion: parseFloat(quiz.negativeMarksPerQuestion),
-      //     subject: quiz.subject,
-      //     Questions: {
-      //       create: quiz.questions
-      //         .filter((question: any) => question.isNewQuestion)
-      //         .map((question: any) => ({
-      //           id: nanoid(),
-      //           question: question.question,
-      //           options: question.options,
-      //           correctAnswer: question.correctAnswerIndex,
-      //         })),
-      //       update: quiz.questions
-      //         .filter((question: any) => !question.isNewQuestion)
-      //         .map((question: any) => ({
-      //           id: question.id,
-      //           question: question.question,
-      //           options: question.options,
-      //           correctAnswer: question.correctAnswerIndex,
-      //         })),
-      //       deleteMany: quiz.removedQuestions.map(
-      //         (question: any) => question.id
-      //       ),
-      //     },
-      //   },
-      // });
-      // if (response) {
-      //   return res.status(200).redirect("/quiz?_success=updated the quiz");
-      // }
+      const newQuiz = await prisma.quiz.create({
+        data: {
+          userId: req.user.id,
+          id: quiz.id,
+          title: quiz.title,
+          semester: quiz.semester,
+          description: quiz.description,
+          endingDate: new Date(quiz.endingDate),
+          startingDate: new Date(quiz.startingDate),
+          timeLimit: quiz.timeLimit,
+          marksPerQuestion: quiz.marksPerQuestion,
+          negativeMarksPerQuestion: quiz.negativeMarksPerQuestion,
+          subject: quiz.subject,
+          Questions: {
+            create: quiz.questions.map((question: any) => ({
+              id: nanoid(),
+              question: question.question,
+              correctAnswer: question.correctAnswerIndex,
+              options: question.options,
+            })),
+          },
+        },
+      });
+
+      res.redirect("/quiz");
     } catch (err) {
       console.log("error in quiz controller", err);
       res
@@ -174,8 +165,17 @@ export class Quiz {
     if (!req.params?.quizId)
       return res.redirect("/quiz?_error='id not provided'");
 
-    await prisma.quiz.delete({ where: { id: req.params.quizId } });
+    await prisma.quiz.delete({
+      where: { id: req.params.quizId },
+      include: { Questions: true, reports: true },
+    });
 
     res.redirect("/quiz?_success='quiz deleted successfully'");
+  }
+
+  static async invigilate(req: RequestWithUser, res: Response): Promise<void> {
+    res.render("home/invigilate", {
+      title: "invigilate",
+    });
   }
 }
