@@ -22,6 +22,74 @@ export class DbUser {
     });
   }
 
+  static async getStudents(req: RequestWithUser, res: Response) {
+    try {
+      const students = await prisma.user.findMany({
+        where: {
+          role: "STUDENT",
+          name: {
+            contains: req.query?.name as string,
+            mode: "insensitive",
+          },
+          email: {
+            contains: req.query?.email as string,
+            mode: "insensitive",
+          },
+          semester: {
+            equals: isNaN(parseInt(req.query?.semester as string))
+              ? undefined
+              : (parseInt(req.query?.semester as string) as number),
+          },
+        },
+      });
+
+      res.render("users/all-users", {
+        users: students
+          .filter((user) => user.email !== req.user.email)
+          .map((user) => ({ ...user, isUserStudent: user.role === "STUDENT" })),
+        email: req.query.email ? req.query.email : "",
+        name: req.query.name ? req.query.name : "",
+        semester: req.query.semester ? req.query.semester : "",
+      });
+    } catch (err) {
+      console.log("err in students");
+    }
+  }
+
+  static async getTeachers(req: RequestWithUser, res: Response) {
+    try {
+      const teachers = await prisma.user.findMany({
+        where: {
+          role: "TEACHER",
+          name: {
+            contains: req.query?.name as string,
+            mode: "insensitive",
+          },
+          email: {
+            contains: req.query?.email as string,
+            mode: "insensitive",
+          },
+          semester: {
+            equals: isNaN(parseInt(req.query?.semester as string))
+              ? undefined
+              : (parseInt(req.query?.semester as string) as number),
+          },
+        },
+      });
+
+      res.render("users/all-users", {
+        users: teachers
+          .filter((user) => user.email !== req.user.email)
+          .map((user) => ({ ...user, isUserStudent: user.role === "STUDENT" })),
+        email: req.query.email ? req.query.email : "",
+        name: req.query.name ? req.query.name : "",
+        semester: req.query.semester ? req.query.semester : "",
+      });
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
   static async editUser(req: RequestWithUser, res: Response) {
     try {
       if (!req.params?.id) return res.redirect("/users");

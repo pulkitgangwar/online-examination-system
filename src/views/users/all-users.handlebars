@@ -7,6 +7,59 @@
   </a>
 </div>
 
+{{! filtering }}
+<div class="columns">
+
+  <div class="column field">
+    <label class="label">Name</label>
+    <div class="control">
+      <input
+        value="{{name}}"
+        class="input user-filter__input user-filter__input--name"
+        type="text"
+        placeholder="Name"
+      />
+    </div>
+  </div>
+  <div class="column field">
+    <label class="label">Email</label>
+    <div class="control">
+      <input
+        value="{{email}}"
+        class="input user-filter__input user-filter__input--email"
+        type="text"
+        placeholder="Email"
+      />
+    </div>
+  </div>
+  <div class="column field">
+    <label class="label">Semester</label>
+    <div class="control">
+      <input
+        value="{{semester}}"
+        class="input user-filter__input user-filter__input--semester"
+        type="number"
+        placeholder="Semester"
+        max="6"
+        min="1"
+      />
+    </div>
+  </div>
+  <div class="column">
+    <label class="label">Filter Actions</label>
+    <div class="columns is-gapless">
+      <div class="column">
+        <button class="button is-info user-filter__btn">Filter</button>
+      </div>
+      <div class="column">
+        <button class="button is-danger user-filter__remove-filter-btn">Remove
+          Filter</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{! /filtering }}
+
 {{#if users.length}}
 
   <table class="table" style="width:100%;">
@@ -46,3 +99,42 @@
   <h1>No user found</h1>
 
 {{/if}}
+
+{{!-- prettier-ignore --}}
+<script>
+  const filterBtn = document.querySelector(".user-filter__btn");
+  const removeFilters = document.querySelector(".user-filter__remove-filter-btn");
+  const email = document.querySelector(".user-filter__input--email");
+  const nameInput = document.querySelector(".user-filter__input--name");
+  const semester = document.querySelector(".user-filter__input--semester");
+
+  
+
+  removeFilters.addEventListener("click",(e) => {
+    window.location.replace(window.location.origin + window.location.pathname);
+  })
+
+  filterBtn.addEventListener("click",(e) => {
+    const queryParams = [];
+    if(email.value) queryParams.push({label:"email",value:email.value});
+    if(nameInput.value) queryParams.push({label:"name",value:nameInput.value});
+    if(semester.value) queryParams.push({label:"semester",value:parseInt(semester.value)});
+    let queryStr = '';
+    queryParams.forEach((query) => {
+
+      queryStr += `${query.label}=${query.value}&`;
+
+    })
+    if(!queryStr) return;
+    queryStr = '?' + queryStr;
+
+    window.location.replace(window.location.origin + window.location.pathname + queryStr);
+
+    
+  })
+
+  
+
+
+
+</script>

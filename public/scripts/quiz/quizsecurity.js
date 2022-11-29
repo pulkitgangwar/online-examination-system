@@ -1,7 +1,7 @@
-DisableDevtool({});
+// DisableDevtool({});
 
-window.onbeforeunload = () => "";
-window.close = () => "";
+// window.onbeforeunload = () => "";
+// window.close = () => "";
 let focusChangeWarning = 0;
 
 const socket = io();
@@ -25,6 +25,7 @@ let escapeWarnings = 0;
 let facialDetectionWarnings = 0;
 
 function onResults(results) {
+  console.log("on result");
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   canvasCtx.drawImage(
@@ -88,6 +89,7 @@ faceMesh.setOptions({
   minTrackingConfidence: 0.4,
 });
 faceMesh.onResults(onResults);
+console.log({ faceMesh });
 
 document.body.requestFullscreen({
   navigationUI: "hide",
@@ -110,13 +112,17 @@ function connectToNewUser(userId, stream) {
 }
 
 const sendToMediaPipe = async () => {
-  // if (!videoElement.videoWidth) {
-  //   console.log(videoElement.videoWidth);
-  //   requestAnimationFrame(sendToMediaPipe);
-  // } else {
-  await faceMesh.send({ image: videoElement });
-  requestAnimationFrame(sendToMediaPipe);
-  // }
+  try {
+    if (!videoElement.videoWidth) {
+      console.log(videoElement.videoWidth);
+      requestAnimationFrame(sendToMediaPipe);
+    } else {
+      await faceMesh.send({ image: videoElement });
+      requestAnimationFrame(sendToMediaPipe);
+    }
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
 // window.addEventListener("focus", function (event) {
@@ -124,8 +130,6 @@ const sendToMediaPipe = async () => {
 // });
 
 window.addEventListener("blur", function (event) {
-  console.log("lost focus");
-
   focusChangeWarning++;
   swal({
     title: "Exam Focus Change Detected",
