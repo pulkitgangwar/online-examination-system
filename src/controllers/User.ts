@@ -10,6 +10,7 @@ import { parseTime } from "../utils/parseTime";
 export class DbUser {
   static async allUsers(req: RequestWithUser, res: Response) {
     const users = await AuthUser.getAllUsers();
+    console.log("all users route");
 
     if (!users) {
       console.log("no user found");
@@ -24,6 +25,7 @@ export class DbUser {
 
   static async getStudents(req: RequestWithUser, res: Response) {
     try {
+      console.log("student user route");
       const students = await prisma.user.findMany({
         where: {
           role: "STUDENT",
@@ -53,11 +55,13 @@ export class DbUser {
       });
     } catch (err) {
       console.log("err in students");
+      throw err;
     }
   }
 
   static async getTeachers(req: RequestWithUser, res: Response) {
     try {
+      console.log("teacher user route");
       const teachers = await prisma.user.findMany({
         where: {
           role: "TEACHER",
@@ -87,6 +91,7 @@ export class DbUser {
       });
     } catch (err) {
       console.log(err.message);
+      throw err;
     }
   }
 

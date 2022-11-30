@@ -174,6 +174,7 @@ export class Quiz {
   }
 
   static async invigilate(req: RequestWithUser, res: Response): Promise<void> {
+    console.log("invigilate route");
     res.render("home/invigilate", {
       title: "invigilate",
     });
