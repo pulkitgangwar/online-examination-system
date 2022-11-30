@@ -4,8 +4,10 @@ import { Router } from "express";
 const router = Router();
 
 router.get("/", DbUser.allUsers);
-router.get("/student",DbUser.getStudents);
-router.get("/teacher",DbUser.getTeachers);
+router.get("/student", DbUser.getStudents);
+router.get("/teacher", DbUser.getTeachers);
+router.get("/registration", DbUser.getUserRegistrations);
+router.get("/registration/approve/:id", DbUser.approveUserRegistration);
 router.get("/add", DbUser.addUser);
 router.post("/add", DbUser.addUserCallback);
 router.get("/edit/:id", DbUser.editUser);

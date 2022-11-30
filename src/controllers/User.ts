@@ -95,6 +95,21 @@ export class DbUser {
     }
   }
 
+  static async getUserRegistrations(
+    req: RequestWithUser,
+    res: Response
+  ): Promise<void> {
+    try {
+      const registrations = await prisma.registration.findMany();
+
+      res.render("users/user-registrations", {
+        users: registrations,
+      });
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
   static async editUser(req: RequestWithUser, res: Response) {
     try {
       if (!req.params?.id) return res.redirect("/users");
@@ -114,6 +129,22 @@ export class DbUser {
     } catch (err) {
       console.log("err in user controlller", err);
       return null;
+    }
+  }
+
+  static async approveUserRegistration(req: RequestWithUser, res: Response) {
+    try {
+      const registration = await prisma.registration.findFirst({
+        where: { id: req.params.id },
+      });
+
+      await prisma.registration.delete({
+        where: { id: req.params.id },
+      });
+
+      res.redirect("/users/registration");
+    } catch (err) {
+      console.log(err.message);
     }
   }
 

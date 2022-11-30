@@ -1,0 +1,33 @@
+<div class="is-flex" style="justify-content:space-between;margin-bottom:16px;">
+
+  <h1 class="title is-1">Settings</h1>
+
+</div>
+
+<div
+  class="box"
+  style="display:flex;justify-content:space-between;align-items:center;"
+>
+  <h3 class="title is-3" style="margin-bottom:0 !important;">Online
+    Registrations</h3>
+  {{#if registration}}
+    <button class="button is-danger setting__registration">Turn Off</button>
+  {{else}}
+    <button class="button is-primary setting__registration">Turn On</button>
+  {{/if}}
+</div>
+
+{{!-- prettier-ignore --}}
+<script>
+
+    const registration = document.querySelector(".setting__registration");
+
+
+    registration.addEventListener('click',(e) => {
+        e.preventDefault();
+        fetch('/settings/toggle').then(response => {
+            window.location.replace(response.url);
+        })
+    })
+
+</script>

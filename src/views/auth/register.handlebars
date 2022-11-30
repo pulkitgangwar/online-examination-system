@@ -1,0 +1,298 @@
+{{#if error}}
+  <div class="notification is-danger mt-1">
+    {{error}}
+  </div>
+{{/if}}
+
+<div
+  style="display:flex;justify-content:center;align-items:center;min-height:100vh;"
+>
+  <div class="box">
+
+    <form class="register">
+
+      <h3 class="title is-2">Register</h3>
+
+      <div class="columns">
+        <div class="column">
+          <div class="field is-vertical">
+            <label class="label" for="register__name-input">Name</label>
+            <div class="field-body">
+              <div class="field">
+                <p class="control">
+                  <input
+                    name="name"
+                    class="input register__name"
+                    id="register__name-input"
+                    type="text"
+                    placeholder="Enter Name"
+                    required
+                  />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+
+          <div class="field is-vertical">
+            <label class="label" for="register__email-input">Email</label>
+            <div class="field-body">
+              <div class="field">
+                <p class="control">
+                  <input
+                    name="email"
+                    class="input register__email"
+                    id="register__email-input"
+                    type="email"
+                    placeholder="Enter email"
+                    required
+                  />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field is-vertical">
+        <label class="label" for="register__semester-input">Semester</label>
+        <div class="select" style="width:100%">
+          <select
+            required
+            name="semester"
+            id="register__semester-input"
+            class="register__semester"
+            style="width:100%"
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="columns register__optional-column">
+
+        {{! optional field }}
+        <div class="column">
+          <div class="field is-vertical">
+            <label class="label" for="register__total-marks-input">Total Marks</label>
+            <div class="field-body">
+              <div class="field">
+                <p class="control">
+                  <input
+                    name="total-marks"
+                    class="input register__total-marks"
+                    id="register__total-marks-input"
+                    type="text"
+                    placeholder="Enter total marks"
+                    required
+                  />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="field is-vertical">
+            <label class="label" for="register__crn-input">CRN</label>
+            <div class="field-body">
+              <div class="field">
+                <p class="control">
+                  <input
+                    name="crn"
+                    class="input register__crn"
+                    id="register__crn-input"
+                    type="text"
+                    placeholder="Enter college roll number"
+                    required
+                  />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{! <div class="columns">
+    <div class="column">
+      <div class="field is-vertical">
+        <label class="label" for="add-quiz__starting-date-input">Starting Date</label>
+        <div class="field-body">
+          <div class="field">
+            <p class="control">
+              <input
+                name="startingDate"
+                class="input add-quiz__starting-date"
+                id="add-quiz__starting-date-input"
+                type="datetime-local"
+                required
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="field is-vertical">
+        <label class="label" for="add-quiz__ending-date-input">Ending Date</label>
+        <div class="field-body">
+          <div class="field">
+            <p class="control">
+              <input
+                name="startingDate"
+                class="input add-quiz__ending-date"
+                id="add-quiz__ending-date-input"
+                type="datetime-local"
+                required
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> }}
+
+      {{! <div class="columns">
+    <div class="column">
+      <div class="field is-vertical">
+        <label class="label" for="add-quiz__marks-per-question-input">Marks Per
+          Question</label>
+        <div class="field-body">
+          <div class="field">
+            <p class="control">
+              <input
+                name="marksPerQuestion"
+                class="input add-quiz__marks-per-question"
+                id="add-quiz__marks-per-question-input"
+                type="number"
+                placeholder="Enter marks per question"
+                required
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="field is-vertical">
+        <label
+          class="label"
+          for="add-quiz__negative-marks-per-question-input"
+        >Negative Marks Per Question</label>
+        <div class="field-body">
+          <div class="field">
+            <p class="control">
+              <input
+                name="negativeMarksPerQuestion"
+                class="input add-quiz__negative-marks-per-question"
+                id="add-quiz__negative-marks-per-question-input"
+                type="number"
+                placeholder="Enter negative marks per question"
+                required
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> }}
+
+      <button
+        type="submit"
+        class="button is-primary is-block is-medium"
+      >Register</button>
+
+    </form>
+
+  </div>
+
+</div>
+
+{{!-- prettier-ignore --}}
+<script>
+    const email = document.querySelector(".register__email");
+    const username = document.querySelector(".register__name");
+    const semester = document.querySelector(".register__semester");
+    const totalMarks = document.querySelector(".register__total-marks");
+    const crn = document.querySelector(".register__crn");
+    const form = document.querySelector(".register");
+
+
+    form.addEventListener("submit",async (e) => {
+        e.preventDefault();
+        const registration = {
+            email:email.value,
+            name:username.value,
+            semester:parseInt(semester.value),
+        }
+
+        if(parseInt(semester.value) > 1) {
+            registration.crn = crn.value;
+            registration.totalMarks = parseInt(totalMarks.value);
+        } 
+
+
+        try {
+
+        const response  = await fetch("/auth/register/save",{
+            body: JSON.stringify(registration),
+            headers:{
+             'content-type':"application/json"   
+            },
+            method:"POST",
+        }) 
+
+        const data = await response.json();
+        window.location.replace("/auth/google?_success=registration completed");
+
+
+        } catch(err) {
+            window.location.replace(window.location.href + '?_error="something went wrong"');
+        }
+        
+        
+    })
+
+
+
+
+    window.addEventListener("DOMContentLoaded",(e) => {
+        removeOptionalFields();
+    })
+    
+    semester.addEventListener("change",(e) => {
+        removeOptionalFields();
+    })
+
+
+    function removeOptionalFields() {
+        const semesterValue = parseInt(semester.value);
+
+        if(semesterValue === 1) {
+            document.querySelector(".register__optional-column").style.display = "none";
+            
+            totalMarks.required = false;
+            crn.required = false;
+            totalMarks.style.display = "none";
+            crn.style.display = "none";
+        } else {
+            document.querySelector(".register__optional-column").style.display = "flex";
+            
+            totalMarks.required = true;
+            crn.required = true;
+            totalMarks.style.display = "block";
+            crn.style.display = "block";
+        }
+    }
+
+
+</script>

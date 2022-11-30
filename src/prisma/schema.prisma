@@ -86,6 +86,22 @@ model Announcement {
   updatedAt   DateTime @default(now()) @updatedAt
 }
 
+model Registration {
+  id         String   @id @default(uuid())
+  email      String
+  name       String
+  semester   Int
+  totalMarks Int?
+  crn        String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+}
+
+model Settings {
+  id           String  @id @default(uuid())
+  registration Boolean @default(false)
+}
+
 enum Role {
   STUDENT
   TEACHER
