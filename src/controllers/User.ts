@@ -100,7 +100,23 @@ export class DbUser {
     res: Response
   ): Promise<void> {
     try {
-      const registrations = await prisma.registration.findMany();
+      const registrations = await prisma.registration.findMany({
+        where: {
+          name: {
+            contains: req.query?.name as string,
+            mode: "insensitive",
+          },
+          email: {
+            contains: req.query?.email as string,
+            mode: "insensitive",
+          },
+          semester: {
+            equals: isNaN(parseInt(req.query?.semester as string))
+              ? undefined
+              : (parseInt(req.query?.semester as string) as number),
+          },
+        },
+      });
 
       res.render("users/user-registrations", {
         users: registrations,
@@ -138,10 +154,39 @@ export class DbUser {
         where: { id: req.params.id },
       });
 
+      const upsertedUser = await prisma.user.upsert({
+        where: {
+          crn: registration.crn,
+        },
+        update: {
+          semester: registration.semester,
+          name: registration.name,
+        },
+        create: {
+          email: registration.email,
+          name: registration.name,
+          semester: registration.semester,
+          crn: registration.semester === 1 ? null : registration.crn,
+          role: "STUDENT",
+        },
+      });
+      console.log("user upserted");
+
       await prisma.registration.delete({
         where: { id: req.params.id },
       });
 
+      res.redirect("/users/registration");
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
+  static async declineUserRegistration(req: RequestWithUser, res: Response) {
+    try {
+      await prisma.registration.delete({
+        where: { id: req.params.id },
+      });
       res.redirect("/users/registration");
     } catch (err) {
       console.log(err.message);
@@ -228,6 +273,7 @@ export class DbUser {
         createdAt: new Date(),
         updatedAt: new Date(),
         semester: parseInt(req.body.semester as string),
+        crn: nanoid(),
       });
 
       if (!newUser) {

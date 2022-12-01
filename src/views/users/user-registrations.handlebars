@@ -66,6 +66,7 @@
         <th><abbr title="Email">Email</abbr></th>
         <th><abbr title="Semester">Semester</abbr></th>
         <th><abbr title="Approve">Approve</abbr></th>
+        <th><abbr title="Decline">Decline</abbr></th>
       </tr>
     </thead>
 
@@ -81,6 +82,10 @@
               data-id={{this.id}}
               onclick="handleApprove(this,'{{this.id}}')"
             >Approve</button></td>
+          <td><button
+              data-id={{this.id}}
+              onclick="handleDecline(this,'{{this.id}}')"
+            >Decline</button></td>
 
         </tr>
       {{/each}}
@@ -112,6 +117,25 @@
             });
         })
        
+    }
+
+    function handleDecline(e,id) {
+     swal({
+            title:"Are you sure?",
+            text:"once removed it cannot be reversed",
+            icon:"warning",
+            buttons:true,
+            dangerMode:true
+        }).then(willDecline => {
+            if(!willDecline) return;
+            fetch(`/users/registration/decline/${id}`)
+            .then((response) => {
+                window.location.replace(response.url)
+            })
+            .catch(err => {
+
+            });
+        }) 
     }
   const filterBtn = document.querySelector(".user-filter__btn");
   const removeFilters = document.querySelector(".user-filter__remove-filter-btn");
